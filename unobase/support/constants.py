@@ -1,0 +1,45 @@
+__author__ = 'michael'
+
+CASE_STATUS_NEW = 0
+CASE_STATUS_ESCALATED = 1
+CASE_STATUS_ON_HOLD = 2
+
+CASE_STATUS_CHOICES = ((CASE_STATUS_NEW, 'New'),
+                       (CASE_STATUS_ESCALATED, 'Escalated'),
+                       (CASE_STATUS_ON_HOLD, 'On Hold'))
+
+CASE_ORIGIN_EMAIL = 0
+CASE_ORIGIN_PHONE = 1
+CASE_ORIGIN_WEB = 2
+
+CASE_ORIGIN_CHOICES = ((CASE_ORIGIN_EMAIL, 'Email'),
+                       (CASE_ORIGIN_PHONE, 'Phone'),
+                       (CASE_ORIGIN_WEB, 'Web'))
+
+CASE_PRIORITY_LOW = 0
+CASE_PRIORITY_MEDIUM = 1
+CASE_PRIORITY_HIGH = 2
+
+CASE_PRIORITY_CHOICES = ((CASE_PRIORITY_LOW, 'Low'),
+                       (CASE_PRIORITY_MEDIUM, 'Medium'),
+                       (CASE_PRIORITY_HIGH, 'High'))
+
+CASE_TYPE_PROBLEM = 0
+CASE_TYPE_FEATURE_REQUEST = 1
+CASE_TYPE_QUESTION = 2
+
+CASE_TYPE_CHOICES = ((CASE_TYPE_PROBLEM, 'Problem'),
+                       (CASE_TYPE_FEATURE_REQUEST, 'Feature Request'),
+                       (CASE_TYPE_QUESTION, 'Question'))
+
+CASE_REASON_UNATTENDED_TRAINING = 0
+CASE_REASON_COMPLEX_FUNCTIONALITY = 1
+CASE_REASON_EXISTING_PROBLEM = 2
+CASE_REASON_INSTRUCTIONS_NOT_CLEAR = 3
+CASE_REASON_NEW_PROBLEM = 4
+
+CASE_REASON_CHOICES = ((CASE_REASON_UNATTENDED_TRAINING, 'Did not attend training'),
+                       (CASE_REASON_COMPLEX_FUNCTIONALITY, 'Complex functionality'),
+                       (CASE_REASON_NEW_PROBLEM, 'New Problem'),
+                       (CASE_REASON_EXISTING_PROBLEM, 'Existing Problem'),
+                       (CASE_REASON_INSTRUCTIONS_NOT_CLEAR, 'Instructions not clear'))

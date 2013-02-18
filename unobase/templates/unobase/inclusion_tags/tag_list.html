@@ -1,0 +1,23 @@
+<div class="tags">
+    {% for tag in tags %}
+        <div class="tagged">
+            {% if user.profile.is_admin %}
+                <a href="javascript: void(0);" class="tag {% if user.profile.is_admin %}tag_open{% endif %}"><span class="tag_l"></span><span>{{ tag.title }}</span><span class="tag_r"></span></a>
+            {% else %}
+                <span class="tag">{{ tag.title }}</span>
+            {% endif %}
+            <div class="tag_popup">
+                <span class="arrow"></span>
+                <form id="frmTag" method="post" action="{% url tagging_manage %}">
+                    {% csrf_token %}
+                    <label for="tag_input">Tag</label>
+                    <input type="hidden" name="tag_id" value="{% if tag.id %}{{ tag.id }}{% endif %}" />
+                    <input type="text" id="tag_input" name="tag" value="{% if tag.id %}{{ tag.title }}{% else %}Create New Tag{% endif %}" onfocus="if (this.value == 'Create New Tag') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Create New Tag';}" maxlength="32"/>
+                    <input type="hidden" name="selected" value="{{ object.tagmodel_ptr_id }}" />
+                    <input type="hidden" id="id_action" name="action" value="" />
+                    <a href="javascript: void(0);" class="tag_action" id="save">Save</a> or <a href="javascript: void(0);" class="close">Close</a> or <a href="javascript: void(0);" class="tag_action" id="delete">Delete</a>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+</div>

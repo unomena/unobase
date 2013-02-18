@@ -1,0 +1,16 @@
+{% load unobase_tags %}
+
+{% if object_list %}
+    <div class="pagination">
+        <p>Displaying {{page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }}</p>
+        {% if page_obj.has_other_pages %}
+            <ul>
+                {% if page_obj.has_previous %}<li><a href="{% smart_query_string 'page' page_obj.previous_page_number %}" class="prev">Previous</a></li>{% endif %}
+                {% for page in paginator.page_range %}
+                    <li><a href="{% smart_query_string 'page' page %}"{% if page_obj.number == page %} class="on"{% endif %}>{{ page }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}<li><a href="{% smart_query_string 'page' page_obj.next_page_number %}" class="next">Next</a></li>{% endif %}
+            </ul>
+        {% endif %}
+    </div><!--/pagination-->
+{% endif %}
