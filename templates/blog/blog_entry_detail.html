@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load unobase_tags blog_widgets %}
+
+{% block title %}{{ object.title }} | {{ object.blog.title }}{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h1>{{ object.blog.title }}</h1>
+            <div class="content">
+                <div class="sidebar">
+                    {% tag_cloud object.pk %}
+                    {% include 'includes/sidebar.html' %}
+                </div>
+                <div class="column">
+                    <div class="listing rich">
+                        <h3>{{ object.title }}</h3>
+                        <img src="{{ object.get_98x98_url }}" class="image_thumb" />
+                        <p>{{ object.content|safe }}</p>
+                    </div>
+                </div>
+                <div class="column">
+                    {% block comments %}
+                        {% include 'commenting/comment_block.html' %}
+                    {% endblock %}
+                </div>
+            </div><!--/content-->
+        </div>
+    </div>
+{% endblock %}
+
+{% block bottom_js %}
+    {% include 'commenting/comment_script.html' %}
+{% endblock %}
