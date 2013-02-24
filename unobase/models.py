@@ -92,8 +92,14 @@ class TagModel(BaseModel):
 class StateModel(TagModel):
     state = models.IntegerField(choices=constants.STATE_CHOICES,
         default=constants.STATE_PUBLISHED)
-    publish_on = models.DateTimeField(blank=True, null=True)
-    retract_on = models.DateTimeField(blank=True, null=True)
+    publish_date_time = models.DateTimeField(blank=True, null=True)
+    retract_date_time = models.DateTimeField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.publish_on and self.state == constants.STATE_PUBLISHED:
+            self.publish_on = timezone.now()
+            
+        return super(StateModel, self).save(*args, **kwargs)
 
     @staticmethod
     def set_permitted_manager(sender, **kwargs):

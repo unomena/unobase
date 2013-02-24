@@ -3,5 +3,5 @@ Authors
 
 Unomena
 -------------------
-* Michael Whelehan
-* Euan Jonker
+* Michael Whelehan ( michael at unomena.com )
+* Euan Jonker ( euan at unomena.com )
