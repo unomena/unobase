@@ -1,5 +1,3 @@
-__author__ = 'michael'
-
 from django.views import generic as generic_views
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType

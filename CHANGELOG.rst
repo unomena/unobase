@@ -13,4 +13,3 @@ Changelog
 #. Fixed license
 #. Added author email addresses
 #. Dropped README.md
-

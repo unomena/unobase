@@ -1,4 +1,3 @@
-__author__ = 'michael'
 from copy import copy
 
 from django import forms

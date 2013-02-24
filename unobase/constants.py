@@ -1,5 +1,3 @@
-__author__ = 'michael'
-
 from settings import DEFAULT_IMAGE_CATEGORY_CHOICES
 
 STATE_PUBLISHED = 0

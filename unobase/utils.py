@@ -1,5 +1,3 @@
-__author__ = 'michael'
-
 def get_choice_value(choice_display, choices):
     choices_dict = dict(choices)
 
