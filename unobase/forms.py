@@ -20,7 +20,7 @@ class Content(forms.ModelForm):
     class Meta:
         model = models.ContentModel
 
-        fields = ['state', 'image', 'publish_on', 'retract_on', 'title',
+        fields = ['state', 'image', 'publish_date_time', 'retract_date_time', 'title',
                   'content', 'modified_by', 'created_by',
                   'tags']
 

@@ -96,8 +96,8 @@ class StateModel(TagModel):
     retract_date_time = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.publish_on and self.state == constants.STATE_PUBLISHED:
-            self.publish_on = timezone.now()
+        if not self.publish_date_time and self.state == constants.STATE_PUBLISHED:
+            self.publish_date_time = timezone.now()
             
         return super(StateModel, self).save(*args, **kwargs)
 
