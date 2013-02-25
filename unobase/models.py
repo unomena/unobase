@@ -70,7 +70,7 @@ class TagModel(BaseModel):
     @staticmethod
     def get_distinct_tags(model_type):
         from unobase.tagging.models import Tag
-        return Tag.objects.filter(tag_models__leaf_content_type__model=model_type).distinct('title')
+        return Tag.objects.filter(tag_models__leaf_content_type__model=model_type).distinct()
 
     @staticmethod
     def get_tag_ratio(tag, model_type):
