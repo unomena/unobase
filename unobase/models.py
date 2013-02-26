@@ -44,17 +44,6 @@ class BaseModel(ImageModel):
 
         return super(BaseModel, self).save(*args, **kwargs)
 
-class StateManager(models.Manager):
-
-    def get_query_set(self):
-        queryset = super(StateManager,
-            self).get_query_set().filter(state__in=[constants.STATE_PUBLISHED,
-                                                    constants.STATE_STAGED])
-        # exclude objects in staging state if not in staging mode (settings.STAGING = False)
-        if not getattr(settings, 'STAGING', False):
-            queryset = queryset.exclude(state=constants.STATE_STAGED)
-        return queryset
-
 class TagModel(BaseModel):
     tags = models.ManyToManyField('tagging.Tag', null=True, blank=True, related_name='tag_models')
 
@@ -87,24 +76,38 @@ class TagModel(BaseModel):
 
         return ratios[list(tag_set).index(tag)]
 
+class StateManager(models.Manager):
+
+    def get_query_set(self):
+        queryset = super(StateManager,
+            self).get_query_set().filter(state__in=[constants.STATE_PUBLISHED,
+                                                    constants.STATE_STAGED])
+        # exclude objects in staging state if not in staging mode (settings.STAGING = False)
+        if not getattr(settings, 'STAGING', False):
+            queryset = queryset.exclude(state=constants.STATE_STAGED)
+        return queryset
+
 class StateModel(TagModel):
     state = models.IntegerField(choices=constants.STATE_CHOICES,
         default=constants.STATE_PUBLISHED)
     publish_date_time = models.DateTimeField(blank=True, null=True)
     retract_date_time = models.DateTimeField(blank=True, null=True)
 
+    class Meta():
+        ordering = ['-publish_date_time']
+        
     def save(self, *args, **kwargs):
         if not self.publish_date_time and self.state == constants.STATE_PUBLISHED:
             self.publish_date_time = timezone.now()
             
         return super(StateModel, self).save(*args, **kwargs)
 
-    @staticmethod
-    def set_permitted_manager(sender, **kwargs):
-        if issubclass(sender, StateModel) and not hasattr(sender, 'permitted'):
-            sender.add_to_class('permitted', StateManager())
-
-models.signals.class_prepared.connect(StateModel.set_permitted_manager)
+#    @staticmethod
+#    def set_permitted_manager(sender, **kwargs):
+#        if issubclass(sender, StateModel) and not hasattr(sender, 'permitted'):
+#            sender.add_to_class('permitted', StateManager())
+#
+#models.signals.class_prepared.connect(StateModel.set_permitted_manager)
 
 class ContentModel(StateModel):
     """
@@ -120,14 +123,7 @@ class ContentModel(StateModel):
     modified_by = models.ForeignKey(User, related_name='modified_objects', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='created_objects', blank=True, null=True)
-
-    class Meta():
-        def __init__(self, *args, **kwargs):
-            if hasattr(self,'title'):
-                self.ordering = ['title']
-            elif hasattr(self,'name'):
-                self.ordering = ['name']
-
+        
     def __unicode__(self):
         if hasattr(self,'title'):
             return smart_unicode(self.title)
