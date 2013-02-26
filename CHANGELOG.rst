@@ -13,3 +13,11 @@ Changelog
 #. Fixed license
 #. Added author email addresses
 #. Dropped README.md
+
+0.0.3 (2013-02-25)
+------------------
+#. Fixed distinct on tags
+
+0.0.4 (2013-02-26)
+------------------
+#. Fixed the ordering of StateModel and removed the auto Manager assignment
