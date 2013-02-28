@@ -21,3 +21,7 @@ Changelog
 0.0.4 (2013-02-26)
 ------------------
 #. Fixed the ordering of StateModel and removed the auto Manager assignment
+
+0.0.5 (2013-02-28)
+------------------
+#. Added description to ContentModel
