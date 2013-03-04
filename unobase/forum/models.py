@@ -1,7 +1,6 @@
 __author__ = 'michael'
 
 from django.db import models
-from django.contrib.auth.models import User
 
 from unobase import models as unobase_models
 

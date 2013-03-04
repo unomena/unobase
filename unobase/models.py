@@ -4,8 +4,8 @@ import re
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
-from django.utils.encoding import smart_unicode
 from django.contrib.auth.models import User
+from django.utils.encoding import smart_unicode
 from django.utils import timezone
 from django.conf import settings
 from django.template.defaultfilters import slugify
@@ -14,6 +14,7 @@ from photologue.models import ImageModel
 from ckeditor.fields import RichTextField
 
 from unobase import constants
+from unobase import settings as unobase_settings
 
 RE_NUMERICAL_SUFFIX = re.compile(r'^[\w-]*-(\d+)+$')
 
@@ -121,9 +122,9 @@ class ContentModel(StateModel):
     slug = models.SlugField(max_length=255, editable=False, db_index=True, unique=True)
     content = RichTextField(blank=True, null=True)
     modified = models.DateTimeField(auto_now=True)
-    modified_by = models.ForeignKey(User, related_name='modified_objects', blank=True, null=True)
+    modified_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='modified_objects', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='created_objects', blank=True, null=True)
+    created_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='created_objects', blank=True, null=True)
         
     def __unicode__(self):
         if hasattr(self,'title'):
@@ -181,9 +182,9 @@ class TagOnlyContentModel(TagModel):
     title = models.CharField(max_length=200)
     content = RichTextField(blank=True, null=True)
     modified = models.DateTimeField(auto_now=True)
-    modified_by = models.ForeignKey(User, related_name='tag_only_modified_objects', blank=True, null=True)
+    modified_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='tag_only_modified_objects', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='tag_only_created_objects', blank=True, null=True)
+    created_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='tag_only_created_objects', blank=True, null=True)
 
     class Meta():
         def __init__(self, *args, **kwargs):
