@@ -9,6 +9,7 @@ from django.utils.encoding import smart_unicode
 from django.utils import timezone
 from django.conf import settings
 from django.template.defaultfilters import slugify
+from django.shortcuts import resolve_url
 
 from photologue.models import ImageModel
 from ckeditor.fields import RichTextField
@@ -17,6 +18,19 @@ from unobase import constants
 from unobase import settings as unobase_settings
 
 RE_NUMERICAL_SUFFIX = re.compile(r'^[\w-]*-(\d+)+$')
+
+class EULAManager(models.Manager):
+    def latest_eula(self):
+        return self.get_query_set().order_by('-version')[0]
+
+class EULA(models.Model):
+    content = models.TextField()
+    version = models.PositiveIntegerField(default=1)
+    
+    objects = EULAManager()
+    
+    def __unicode__(self):
+        return u'Version %i' % self.version
 
 class BaseModel(ImageModel):
     leaf_content_type = models.ForeignKey(ContentType, editable=False, null=True)

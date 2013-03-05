@@ -44,3 +44,4 @@ class DefaultImageAdmin(StateModelAdmin):
 
 admin.site.register(models.DefaultImage, DefaultImageAdmin)
 admin.site.register(models.TagModel)
+admin.site.register(models.EULA)
