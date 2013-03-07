@@ -5,12 +5,40 @@
         <p>Displaying {{page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }}</p>
         {% if page_obj.has_other_pages %}
             <ul>
-                {% if page_obj.has_previous %}<li><a href="{% smart_query_string 'page' page_obj.previous_page_number %}" class="prev">Previous</a></li>{% endif %}
-                {% for page in paginator.page_range %}
-                    <li><a href="{% smart_query_string 'page' page %}"{% if page_obj.number == page %} class="on"{% endif %}>{{ page }}</a></li>
-                {% endfor %}
-                {% if page_obj.has_next %}<li><a href="{% smart_query_string 'page' page_obj.next_page_number %}" class="next">Next</a></li>{% endif %}
+                {% if paginator.page_range|length > 20 %}
+                	<select id="pagination_options" onchange="option_check()">
+                		{% for page in paginator.page_range %}
+		                    <option value="{% smart_query_string 'page' page %}">{{ page }}</option>
+		                {% endfor %}
+                	</select>
+                {% else %}
+                	{% if page_obj.has_previous %}<li><a href="{% smart_query_string 'page' page_obj.previous_page_number %}" class="prev">Previous</a></li>{% endif %}
+	                {% for page in paginator.page_range %}
+	                    <li><a href="{% smart_query_string 'page' page %}"{% if page_obj.number == page %} class="on"{% endif %}>{{ page }}</a></li>
+	                {% endfor %}
+	                {% if page_obj.has_next %}<li><a href="{% smart_query_string 'page' page_obj.next_page_number %}" class="next">Next</a></li>{% endif %}
+	            {% endif %}
             </ul>
         {% endif %}
     </div><!--/pagination-->
+    
+    <script>
+	    function get_parameter_by_name(name) {
+	        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+	        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+	    }
+    
+    	function option_check(){
+	    	var option = document.getElementById("pagination_options").value;
+	    	
+	    	window.location.href = window.location.href.split('?')[0] += option;
+    	}
+    	
+    	var pagination_options = document.getElementById("pagination_options");
+    	
+    	if (pagination_options != null){
+    		var page_number = get_parameter_by_name('page') || 1;
+    		pagination_options.selectedIndex = page_number-1;
+    	}
+    </script>
 {% endif %}

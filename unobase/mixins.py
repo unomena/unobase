@@ -15,12 +15,12 @@ from django.utils.decorators import method_decorator
 from django.utils.http import urlquote
 from django.views.generic import CreateView
 from django.utils.decorators import available_attrs
-from django.shortcuts import resolve_url
 
 from functools import wraps
 
 from unobase.decorators import login_required
 from unobase import models
+from unobase.eula import models as eula_models
 
 class LoginRequiredMixin(object):
     """
@@ -310,23 +310,22 @@ class FilterMixin(object):
     def get_queryset_filters(self):
         filters = {}
         for item in self.allowed_filters:
-            if item in self.request.GET:
+            if item in self.request.GET and self.request.GET[item]:
                 filters[self.allowed_filters[item]] = self.request.GET[item]
 
         return filters
 
     def get_queryset(self):
         return super(FilterMixin, self).get_queryset()\
-        .filter(**self.get_queryset_filters())
+            .filter(**self.get_queryset_filters())
         
 def redirect_to_eula(next, eula_url=None,
                       redirect_field_name='next'):
     """
     Redirects the user to the login page, passing the given 'next' page
     """
-    resolved_url = resolve_url(eula_url)
 
-    login_url_parts = list(urlparse(resolved_url))
+    login_url_parts = list(urlparse(eula_url))
     if redirect_field_name:
         querystring = QueryDict(login_url_parts[4], mutable=True)
         querystring[redirect_field_name] = next
@@ -340,7 +339,7 @@ class EULAAcceptedMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            if request.user.eula_accepted.version != models.EULA.objects.latest_eula().version:  # If the user is a standard user,
+            if request.user.eula_accepted.version != eula_models.EULA.objects.latest_eula().version:  # If the user is a standard user,
                 if self.raise_exception:  # *and* if an exception was desired
                     raise PermissionDenied  # return a forbidden response.
                 else:
