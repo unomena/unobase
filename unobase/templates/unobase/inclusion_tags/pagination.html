@@ -6,9 +6,10 @@
         {% if page_obj.has_other_pages %}
             <ul>
                 {% if paginator.page_range|length > 20 %}
+                	<label for="pagionation_options">Select page</label>
                 	<select id="pagination_options" onchange="option_check()">
                 		{% for page in paginator.page_range %}
-		                    <option value="{% smart_query_string 'page' page %}">{{ page }}</option>
+		                    <option {% if page_obj.number == page %}selected="selected"{% endif %} value="{% smart_query_string 'page' page %}">{{ page }}</option>
 		                {% endfor %}
                 	</select>
                 {% else %}
@@ -23,22 +24,10 @@
     </div><!--/pagination-->
     
     <script>
-	    function get_parameter_by_name(name) {
-	        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-	        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-	    }
-    
     	function option_check(){
 	    	var option = document.getElementById("pagination_options").value;
 	    	
 	    	window.location.href = window.location.href.split('?')[0] += option;
-    	}
-    	
-    	var pagination_options = document.getElementById("pagination_options");
-    	
-    	if (pagination_options != null){
-    		var page_number = get_parameter_by_name('page') || 1;
-    		pagination_options.selectedIndex = page_number-1;
     	}
     </script>
 {% endif %}
