@@ -12,7 +12,8 @@ urlpatterns = patterns('',
 #        name='blog_detail'),
 
     url(r'^list/$',
-        views.OutboundEmailList.as_view(template_name='email_tracking/outbound_email_list.html'),
+        views.OutboundEmailList.as_view(template_name='email_tracking/outbound_email_list.html',
+                                        paginate_by=20),
         name='outbound_email_list'),
 
     url(r'^detail/(?P<pk>\d+)/$',

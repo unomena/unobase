@@ -5,7 +5,7 @@
         <p>Displaying {{page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }}</p>
         {% if page_obj.has_other_pages %}
             <ul>
-                {% if paginator.page_range|length > 20 %}
+                {% if paginator.page_range|length > 15 %}
                 	<label for="pagionation_options">Select page</label>
                 	<select id="pagination_options" onchange="option_check()">
                 		{% for page in paginator.page_range %}
