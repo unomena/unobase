@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='unobase',
-    version='0.2.0',
+    version='0.2.1',
     description='Unomena Base Django Application',
-    long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
+    long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read(),
     author='Unomena',
     author_email='dev@unomena.com',
     license='BSD',
