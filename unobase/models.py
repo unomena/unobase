@@ -18,35 +18,10 @@ from unobase import settings as unobase_settings
 
 RE_NUMERICAL_SUFFIX = re.compile(r'^[\w-]*-(\d+)+$')
 
-class BaseModel(ImageModel):
+
+class TagModel(models.Model):
+    tags = models.ManyToManyField('tagging.Tag', null=True, blank=True)
     leaf_content_type = models.ForeignKey(ContentType, editable=False, null=True)
-
-    def as_leaf_class(self):
-        """
-        Returns the leaf class no matter where the calling instance is in
-        the inheritance hierarchy.
-        Inspired by http://www.djangosnippets.org/snippets/1031/
-        """
-        try:
-            return self.__getattribute__(self.class_name.lower())
-        except AttributeError:
-            content_type = self.leaf_content_type
-            model = content_type.model_class()
-            if(model == BaseModel):
-                return self
-            return model.objects.get(id=self.id)
-
-    def save(self, *args, **kwargs):
-        # set leaf class content type
-        if not self.leaf_content_type:
-            self.leaf_content_type = ContentType.objects.get_for_model(
-                self.__class__
-            )
-
-        return super(BaseModel, self).save(*args, **kwargs)
-
-class TagModel(BaseModel):
-    tags = models.ManyToManyField('tagging.Tag', null=True, blank=True, related_name='tag_models')
 
     @staticmethod
     def get_tags(model_type):
@@ -76,6 +51,30 @@ class TagModel(BaseModel):
             ratios.append(int((tag_numbers[i] / total_tags) * 10))
 
         return ratios[list(tag_set).index(tag)]
+    
+    def as_leaf_class(self):
+        """
+        Returns the leaf class no matter where the calling instance is in
+        the inheritance hierarchy.
+        Inspired by http://www.djangosnippets.org/snippets/1031/
+        """
+        try:
+            return self.__getattribute__(self.class_name.lower())
+        except AttributeError:
+            content_type = self.leaf_content_type
+            model = content_type.model_class()
+            if(model == TagModel):
+                return self
+            return model.objects.get(id=self.id)
+
+    def save(self, *args, **kwargs):
+        # set leaf class content type
+        if not self.leaf_content_type:
+            self.leaf_content_type = ContentType.objects.get_for_model(
+                self.__class__
+            )
+
+        return super(TagModel, self).save(*args, **kwargs)
 
 class StateManager(models.Manager):
 
@@ -88,7 +87,7 @@ class StateManager(models.Manager):
             queryset = queryset.exclude(state=constants.STATE_STAGED)
         return queryset
 
-class StateModel(TagModel):
+class StateModel(models.Model):
     state = models.IntegerField(choices=constants.STATE_CHOICES,
         default=constants.STATE_PUBLISHED)
     publish_date_time = models.DateTimeField(blank=True, null=True)
@@ -96,6 +95,7 @@ class StateModel(TagModel):
 
     class Meta():
         ordering = ['-publish_date_time']
+        abstract = True
         
     def save(self, *args, **kwargs):
         if not self.publish_date_time and self.state == constants.STATE_PUBLISHED:
@@ -103,14 +103,14 @@ class StateModel(TagModel):
             
         return super(StateModel, self).save(*args, **kwargs)
 
-#    @staticmethod
-#    def set_permitted_manager(sender, **kwargs):
-#        if issubclass(sender, StateModel) and not hasattr(sender, 'permitted'):
-#            sender.add_to_class('permitted', StateManager())
-#
-#models.signals.class_prepared.connect(StateModel.set_permitted_manager)
+    @staticmethod
+    def set_permitted_manager(sender, **kwargs):
+        if issubclass(sender, StateModel) and not hasattr(sender, 'permitted'):
+            sender.add_to_class('permitted', StateManager())
 
-class ContentModel(StateModel):
+models.signals.class_prepared.connect(StateModel.set_permitted_manager)
+
+class ContentModel(ImageModel, TagModel):
     """
     A model with useful fields and methods.
     """
@@ -125,7 +125,9 @@ class ContentModel(StateModel):
     modified_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='modified_objects', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='created_objects', blank=True, null=True)
-        
+    
+    objects = models.Manager()
+    
     def __unicode__(self):
         if hasattr(self,'title'):
             return smart_unicode(self.title)
@@ -172,7 +174,7 @@ class ContentModel(StateModel):
 
         return super(ContentModel, self).save(*args, **kwargs)
 
-class TagOnlyContentModel(TagModel):
+class TagOnlyContentModel(ImageModel, TagModel):
     """
     A model with useful fields and methods.
     """
@@ -185,6 +187,8 @@ class TagOnlyContentModel(TagModel):
     modified_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='tag_only_modified_objects', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='tag_only_created_objects', blank=True, null=True)
+    
+    objects = models.Manager()
 
     class Meta():
         def __init__(self, *args, **kwargs):
@@ -219,11 +223,12 @@ class DefaultImageManager(StateManager):
         else:
             return None
 
-class DefaultImage(StateModel):
+class DefaultImage(ImageModel, StateModel):
     title = models.CharField(max_length=32)
     category = models.CharField(max_length=16, null=True, blank=True,
         choices=constants.DEFAULT_IMAGE_CATEGORY_CHOICES)
-
+    
+    objects = models.Manager()
     permitted = DefaultImageManager()
     
 def get_display_name(self):
