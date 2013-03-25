@@ -1,23 +1,22 @@
-<script src="{{ STATIC_URL }}skyhigh/js/libs/jquery.form.js"></script>
 <script>
     var options = { target : '#comment_form_div', success : update_comment_list};
     
     function update_comment_list(responseText, statusText, xhr, $form)  { 
-        $('#comment_list_div').load('{% url comment_list content_type.id object.id %}');
+        $('#comment_list_div').load('{% url 'comment_list' object.leaf_content_type.id object.id %}');
         $('#comment_form').ajaxForm(options);
     }
 
     $(document).ready(function() {
     	{% if user.is_authenticated %}
-	        $('#comment_form_div').load('{% url comment_create content_type.id object.id %}', function() {
+	        $('#comment_form_div').load('{% url 'comment_create' object.leaf_content_type.id object.id %}', function() {
 	            $('#comment_form').ajaxForm(options);
 	        });
         {% endif %}
-        $('#comment_list_div').load('{% url comment_list content_type.id object.id %}');
+        $('#comment_list_div').load('{% url 'comment_list' object.leaf_content_type.id object.id %}');
     });
 
     function load_page_ajax(page) {
-        $('#comment_list_div').load('{% url comment_list content_type.id object.id %}?page='+page);
+        $('#comment_list_div').load('{% url 'comment_list' object.leaf_content_type.id object.id %}?page='+page);
     }
     
     function reply(user, comment_id){

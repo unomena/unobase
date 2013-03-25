@@ -2,7 +2,7 @@
 
 <h3>Comments</h3>
 {% include 'unobase/includes/message_error_header.html' %}
-<form id="comment_form" name="comment_form" id="comment_form" action="{% url comment_create form.object_content_type.id form.object.id %}" method="POST">
+<form id="comment_form" name="comment_form" id="comment_form" action="{% url 'comment_create' form.object_content_type.id form.object.id %}" method="POST">
     {% csrf_token %}
     <div class="field">
         <label for="comment">Post a Comment</label>

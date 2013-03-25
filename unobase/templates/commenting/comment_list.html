@@ -5,7 +5,7 @@
 	    {% comment %}
 	    <div class="avatar">
 		    {% if user.profile.is_staff %}
-	           <a href="{% url user_detail object.user.id %}">
+	           <a href="{% url 'user_detail' object.user.id %}">
 	               <img src="{{ object.user.profile.get_62x62_url }}" />
 	           </a>
 	        {% else %}
@@ -16,7 +16,7 @@
 	    <div class="comment_content">
 	        <div class="user user_title">
 	           {% if user.profile.is_staff %}
-	               <a href="{% url user_detail object.user.id %}">{{ object.user.display_name }}</a>
+	               <a href="{% url 'user_detail' object.user.id %}">{{ object.user.display_name }}</a>
 	           {% else %}
 	               <strong>{{ object.user.display_name }}</strong>
 	           {% endif %}
@@ -30,24 +30,24 @@
 		            <div class="actions">
 		                {% if user.profile.is_superuser %}
 		                    {% if object.state == 'pending' %}
-		                      <a href="{% url moderate_comment_approve object.id %}">Approve</a> &middot;
-		                      <a href="{% url moderate_comment_unapprove object.id %}">Unapprove</a> &middot;
-		                      <a href="{% url moderate_comment_spam object.id %}">Spam</a> &middot;
+		                      <a href="{% url 'moderate_comment_approve' object.id %}">Approve</a> &middot;
+		                      <a href="{% url 'moderate_comment_unapprove' object.id %}">Unapprove</a> &middot;
+		                      <a href="{% url 'moderate_comment_spam' object.id %}">Spam</a> &middot;
 		                    {% endif %}
 		                    {% if object.state == 'approved' %}
-		                      <a href="{% url moderate_comment_unapprove object.id %}">Unapprove</a> &middot;
-		                      <a href="{% url moderate_comment_spam object.id %}">Spam</a> &middot;
+		                      <a href="{% url 'moderate_comment_unapprove' object.id %}">Unapprove</a> &middot;
+		                      <a href="{% url 'moderate_comment_spam' object.id %}">Spam</a> &middot;
 		                    {% endif %}
 		                    {% if object.state == 'unapproved' %}
-		                      <a href="{% url moderate_comment_approve object.id %}">Approve</a> &middot;
-		                      <a href="{% url moderate_comment_spam object.id %}">Spam</a> &middot;
+		                      <a href="{% url 'moderate_comment_approve' object.id %}">Approve</a> &middot;
+		                      <a href="{% url 'moderate_comment_spam' object.id %}">Spam</a> &middot;
 		                    {% endif %}
 		                    {% if object.state == 'spam' %}
-		                      <a href="{% url moderate_comment_approve object.id %}">Approve</a> &middot;
-		                      <a href="{% url moderate_comment_unapprove object.id %}">Unapprove</a> &middot;
+		                      <a href="{% url 'moderate_comment_approve' object.id %}">Approve</a> &middot;
+		                      <a href="{% url 'moderate_comment_unapprove' object.id %}">Unapprove</a> &middot;
 		                    {% endif %}
 		                    {% if user.profile.is_admin and not object.user.profile.is_blacklisted %}
-	                          <a href="{% url moderate_comment_blacklist object.id %}">Blacklist</a> &middot;
+	                          <a href="{% url 'moderate_comment_blacklist' object.id %}">Blacklist</a> &middot;
 	                        {% endif %}
 		                {% endif %}
 		                <a href="javascript:reply('{{ object.user.display_name }}', {{ object.id }});">Reply</a>
