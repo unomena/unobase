@@ -37,9 +37,6 @@ class CustomCommentCreate(unobase_mixins.LoginRequiredMixin, generic_views.Creat
 class CustomCommentList(generic_views.ListView):
 
     def get_queryset(self):
-        
-        print models.CustomComment.objects.filter(content_type=self.kwargs['content_type_pk'], object_pk=self.kwargs['object_pk'])
-        
         self.comments = utils.get_permitted_comments(queryset=models.CustomComment.objects.filter(content_type=self.kwargs['content_type_pk'],
                                                                                                   object_pk=self.kwargs['object_pk']),
                                                      user=self.request.user)
