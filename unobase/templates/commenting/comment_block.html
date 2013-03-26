@@ -1,7 +1,7 @@
 <div class="comments" id="comments">
     <div id="comment_form_div">
         {% if not user.is_authenticated %}
-            <p><a href="{% url secure_login %}">Sign In</a> or <a href="{% url secure_register %}">Register</a> to comment.</p>
+            <p><a href="{% url 'secure_login' %}">Sign In</a> or <a href="{% url 'secure_register' %}">Register</a> to comment.</p>
         {% endif %}
     </div>
     <div id="comment_list_div"></div>

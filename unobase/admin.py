@@ -23,7 +23,7 @@ make_unpublished.short_description = "Mark selected items as unpublished"
 class StateModelAdmin(admin.ModelAdmin):
     actions = [make_published, make_staged, make_unpublished, make_deleted]
 
-class ContentModelAdmin(StateModelAdmin):
+class AuditModelAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.modified_by = request.user
@@ -33,7 +33,10 @@ class ContentModelAdmin(StateModelAdmin):
         except User.DoesNotExist:
             obj.created_by = request.user
 
-        return super(ContentModelAdmin, self).save_model(request, obj, form, change)
+        return super(AuditModelAdmin, self).save_model(request, obj, form, change)
+    
+class ContentModelAdmin(StateModelAdmin, AuditModelAdmin):
+    pass
 
 class DefaultImageAdmin(StateModelAdmin):
     list_display = ('title', 'state', 'admin_thumbnail',)

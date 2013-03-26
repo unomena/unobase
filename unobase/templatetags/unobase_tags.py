@@ -12,6 +12,7 @@ register = template.Library()
 def tag_list(context, obj):
     context = copy(context)
     tags = list(obj.tags.all())
+
     if context['user'].is_authenticated() and context['user'].is_staff:
         tags.append({'title': '+'})
     context.update({'object': obj.as_leaf_class(),
