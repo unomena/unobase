@@ -36,7 +36,8 @@ class AuditModelAdmin(admin.ModelAdmin):
         return super(AuditModelAdmin, self).save_model(request, obj, form, change)
     
 class ContentModelAdmin(StateModelAdmin, AuditModelAdmin):
-    pass
+    list_display = ('title', 'leaf_content_type', 'admin_thumbnail',)
+    
 
 class DefaultImageAdmin(StateModelAdmin):
     list_display = ('title', 'state', 'admin_thumbnail',)

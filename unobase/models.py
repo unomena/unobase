@@ -117,7 +117,7 @@ class AuditModel(BaseModel):
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, related_name='created_objects', blank=True, null=True)
 
-class ContentModel(ImageModel, AuditModel, TagModel):
+class ContentModel(ImageModel, TagModel, AuditModel):
     """
     A model with useful fields and methods.
     """

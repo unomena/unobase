@@ -9,7 +9,7 @@ import constants
 from unobase import models as unobase_models
 from unobase import settings as unobase_settings
 
-class CustomComment(Comment, unobase_models.TagModel):
+class CustomComment(unobase_models.TagModel, Comment):
     visible_to = models.IntegerField(choices=constants.COMMENT_VISIBLE_TO_CHOICES,
                                      default=constants.COMMENT_VISIBLE_TO_EVERYONE)
     posted_on_behalf_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, null=True, blank=True, related_name='comments_posted_on_behalf')

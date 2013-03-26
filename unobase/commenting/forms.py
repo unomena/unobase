@@ -57,6 +57,4 @@ class CustomCommentForm(forms.ModelForm):
             cleaned_data['posted_on_behalf_by'] = self.user
 
         return cleaned_data
-
-    def save(self, *args, **kwargs):
-        return super(CustomCommentForm, self).save(*args, **kwargs)
+    
