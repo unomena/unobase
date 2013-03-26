@@ -19,6 +19,7 @@ class CustomComment(Comment, unobase_models.TagModel):
     moderated_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, null=True, blank=True, related_name='comments_moderated')
     moderated_on = models.DateTimeField(null=True, blank=True)
     order = models.DecimalField(max_digits=8, decimal_places=4, null=True, blank=True)
+    report_count = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
         ordering = ('-order','-submit_date',)

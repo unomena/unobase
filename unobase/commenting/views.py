@@ -7,9 +7,10 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
 from unobase import mixins as unobase_mixins
+from unobase import utils as unobase_utils
 from unobase.commenting  import models, signals, utils
 
-class CustomCommentCreate(unobase_mixins.LoginRequiredMixin, generic_views.CreateView):
+class CustomCommentCreate(generic_views.CreateView):
 
     def get_initial(self):
         return {'user' : self.request.user,
@@ -33,20 +34,45 @@ class CustomCommentCreate(unobase_mixins.LoginRequiredMixin, generic_views.Creat
             return request.META['HTTP_X_REAL_IP'] if 'HTTP_X_REAL_IP' in request.META and request.META['HTTP_X_REAL_IP'] else request.META['REMOTE_ADDR']
         except:
             return '0.0.0.0'
-
-class CustomCommentList(generic_views.ListView):
-
-    def get_queryset(self):
         
-        print models.CustomComment.objects.filter(content_type=self.kwargs['content_type_pk'], object_pk=self.kwargs['object_pk'])
-        
-        self.comments = utils.get_permitted_comments(queryset=models.CustomComment.objects.filter(content_type=self.kwargs['content_type_pk'],
-                                                                                                  object_pk=self.kwargs['object_pk']),
-                                                     user=self.request.user)
-        
-        return self.comments
-
+class CustomCommentListMixin(generic_views.ListView):
+    
     def get_context_data(self, **kwargs):
-        context = super(CustomCommentList, self).get_context_data(**kwargs)
+        context = super(CustomCommentListMixin, self).get_context_data(**kwargs)
+
         context['comment_count'] = self.comments.count()
         return context
+    
+    def get_queryset(self):
+        self.comments = utils.get_permitted_comments(queryset=models.CustomComment.objects.filter(content_type=self.kwargs['content_type_pk'],
+                                                                                                  object_pk=self.kwargs['object_pk'],
+                                                                                                  report_count__lt=3),
+                                                                                                  user=self.request.user)
+        
+        return self.comments
+        
+
+class CustomCommentReport(CustomCommentListMixin):
+
+    def get(self, request, *args, **kwargs):
+        comments_reported = request.session.get('comments_reported', [])
+        
+        if not self.kwargs['pk'] in comments_reported:
+            comments_reported.append(self.kwargs['pk'])
+            request.session['comments_reported'] = comments_reported
+            
+            comment = get_object_or_404(models.CustomComment, pk=self.kwargs['pk'])
+
+            comment.report_count += 1
+            comment.save()
+    
+            messages.success(self.request, 'Comment has been reported.')
+        else:
+            messages.success(self.request, 'You have already reported this comment.')
+        
+        return super(CustomCommentReport, self).get(request, *args, **kwargs)
+
+class CustomCommentList(CustomCommentListMixin):
+    """
+    List for comments
+    """

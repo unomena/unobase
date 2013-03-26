@@ -34,7 +34,8 @@ class CustomCommentForm(forms.ModelForm):
         self.user = self.initial.pop('user')
         self.ip_address = self.initial.pop('ip_address')
 
-        self.fields['user'].initial = self.user
+        if not self.user.is_anonymous():
+            self.fields['user'].initial = self.user
         self.fields['content_type'].initial = self.object_content_type
         self.fields['object_pk'].initial = self.object.id
         self.fields['submit_date'].required = False

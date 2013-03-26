@@ -1,0 +1,14 @@
+<div class="poll">
+    <form id="frmPoll" action="{% url 'poll_answer' %}">
+        <p class="question">{{ form.poll.question }}:</p>
+        {{ form.answers }}
+        {% comment %}
+        <div class="row"><input type="radio" id="poll_1" name="poll" /> Yes, another option</div>
+        <div class="row"><input type="radio" id="poll_2" name="poll" /> Yes, another option</div>
+        {% endcomment %}
+        <div class="btns">
+            <input type="submit" id="submit" value="Vote">
+            <p><a href="#">See Results</a></p>
+        </div>
+    </form>
+</div>
