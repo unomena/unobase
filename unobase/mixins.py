@@ -354,4 +354,41 @@ class EULAAcceptedMixin(object):
 
         return super(EULAAcceptedMixin, self).dispatch(request,
             *args, **kwargs)
+        
+def redirect_to_age_gate(next, age_gate_url=None,
+                      redirect_field_name='next'):
+    """
+    Redirects the user to the login page, passing the given 'next' page
+    """
+
+    login_url_parts = list(urlparse(age_gate_url))
+    if redirect_field_name:
+        querystring = QueryDict(login_url_parts[4], mutable=True)
+        querystring[redirect_field_name] = next
+        login_url_parts[4] = querystring.urlencode(safe='/')
+
+    return HttpResponseRedirect(urlunparse(login_url_parts))
+        
+class AgeGateMixin(object):
+    age_gate_url = None
+    raise_exception = False  # Default whether to raise an exception to none
+
+    def dispatch(self, request, *args, **kwargs):
+        user_date_of_birth = request.session.get('user_date_of_birth')
+        country_date_of_birth_required = request.session.get('country_date_of_birth_required')
+        
+        if user_date_of_birth is not None and country_date_of_birth_required is not None:
+            if  user_date_of_birth > country_date_of_birth_required:  # If the user is a standard user,
+                if self.raise_exception:  # *and* if an exception was desired
+                    raise PermissionDenied  # return a forbidden response.
+                else:
+                    return redirect_to_age_gate(request.get_full_path(), self.age_gate_url)
+        else:
+            if self.raise_exception:  # *and* if an exception was desired
+                raise PermissionDenied  # return a forbidden response.
+            else:
+                return redirect_to_age_gate(request.get_full_path(), self.age_gate_url)
+
+        return super(AgeGateMixin, self).dispatch(request,
+            *args, **kwargs)
     

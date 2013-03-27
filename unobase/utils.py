@@ -3,6 +3,7 @@ from django.core.mail import get_connection, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django import http
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes.models import ContentType
 
 from unobase.email_tracking import models as email_tracker_models
 
@@ -82,3 +83,11 @@ def get_email_subject(template_name, ctx_dict):
 def get_email_text_content(template_name, ctx_dict):
     return render_to_string(template_name,
         ctx_dict)
+    
+def get_object_comment_list_for_user(user, comments_qs, obj):
+    comments = comments_qs.filter(object_pk=obj.id,
+                                  content_type=ContentType.objects.get_for_model(obj))
+    
+    return comments
+    
+

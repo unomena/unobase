@@ -25,6 +25,8 @@ class CustomCommentForm(forms.ModelForm):
                    'in_reply_to' : forms.HiddenInput,
                    'report_count' : forms.HiddenInput,
                    }
+        
+        exclude = ('report_count',)
 
     def __init__(self, *args, **kwargs):
         super(CustomCommentForm, self).__init__(*args, **kwargs)
@@ -43,7 +45,6 @@ class CustomCommentForm(forms.ModelForm):
         self.fields['site'].initial = Site.objects.get_current()
         self.fields['ip_address'].initial = self.ip_address
         self.fields['is_public'].initial = True
-        self.fields['report_count'].initial = 0
         
         self.fields['visible_to'].widget = forms.Select(choices=constants.COMMENT_VISIBLE_TO_CHOICES if self.user.is_superuser else constants.COMMENT_VISIBLE_TO_CHOICES_STAFF)
         if not self.user.is_staff or not self.user.is_superuser:

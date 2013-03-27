@@ -1,14 +1,38 @@
 <div class="poll">
-    <form id="frmPoll" action="{% url 'poll_answer' %}">
+    <form id="frmPoll" action="{% url 'poll_answer' %}" method="post">
+    	{% csrf_token %}
         <p class="question">{{ form.poll.question }}:</p>
         {{ form.answers }}
-        {% comment %}
-        <div class="row"><input type="radio" id="poll_1" name="poll" /> Yes, another option</div>
-        <div class="row"><input type="radio" id="poll_2" name="poll" /> Yes, another option</div>
-        {% endcomment %}
         <div class="btns">
             <input type="submit" id="submit" value="Vote">
-            <p><a href="#">See Results</a></p>
+            <p><a href="javascript:show_poll_results();">See Results</a></p>
         </div>
     </form>
 </div>
+<div class="poll_results">
+	<div class="content">
+		{% include 'poll/includes/poll_results.html' %}
+	</div>
+	<div class="btns">
+        <p><a href="javascript:show_poll();">See Poll</a></p>
+    </div>
+</div>
+
+<script>
+	function show_poll(){
+		$('.poll_results').hide();
+		$('.poll').fadeIn();
+	}
+	
+	function show_poll_results(){
+		$('.poll').hide();
+		$('.poll_results').fadeIn();
+	}
+
+	$(document).ready(function() {
+		$('#frmPoll').ajaxForm({success: function(responseText){
+			$('.poll_results .content').html(responseText);
+			show_poll_results();
+		}});
+	});
+</script>
