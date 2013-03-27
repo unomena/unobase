@@ -37,6 +37,8 @@ class CustomCommentCreate(generic_views.CreateView):
         
 class CustomCommentListMixin(generic_views.ListView):
     
+    exclude_replies = False
+    
     def get_context_data(self, **kwargs):
         context = super(CustomCommentListMixin, self).get_context_data(**kwargs)
 
@@ -50,6 +52,9 @@ class CustomCommentListMixin(generic_views.ListView):
                                                                                                   object_pk=self.kwargs['object_pk'],
                                                                                                   report_count__lt=3),
                                                                                                   user=self.request.user)
+        
+        if self.exclude_replies:
+            self.comments = self.comments.filter(in_reply_to=None)
         
         return self.comments
         

@@ -17,8 +17,12 @@ urlpatterns = patterns('',
         name='comment_report'),
 
     url(r'^comment_list/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/$',
-        views.CustomCommentList.as_view(paginate_by=2, template_name='commenting/comment_list.html'),
+        views.CustomCommentList.as_view(paginate_by=4, template_name='commenting/comment_list.html'),
         name='comment_list'),
+
+    url(r'^comments/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/$',
+        views.CustomCommentList.as_view(paginate_by=4, template_name='commenting/comments.html'),
+        name='comments'),
                        
     #Ajax calls
     url(r'^comment_count/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/$', 
