@@ -1,0 +1,11 @@
+<table>
+	{% for result in results %}
+		<tr>
+			<td>Answer {{ forloop.counter }}</td>
+			<td>
+				<div style="background-color: blue; width: {{ result }};" />
+				<p>{{ result }}</p>
+			</td>
+		</tr>
+	{% endfor %}
+</table>

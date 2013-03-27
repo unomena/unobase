@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block outer_content %}
+<div id="wrap" class="age">
+
+    <div class="gateway">
+        <div class="age_logo"></div>
+        <div class="age_content">
+            <form id="Age" action="." method="post">
+            	{% csrf_token %}
+                <h1>To enter the product section of the<br />Guinness Nigera Plc website, please ensure that<br />you are of legal drinking age in your country.</h1>
+                <div class="row">
+                    <div class="field age_location">
+                        <label for="id_location">Your Location?</label>
+                        {{ form.location }}{{ form.location.errors }}
+                    </div>
+                    <div class="field age_dob">
+                        <label for="id_dob">When Were You Born?</label>
+                        {{ form.birth_day }}{{ form.birth_day.errors }}
+                        {{ form.birth_month }}{{ form.birth_month.errors }}
+                        {{ form.birth_year }}{{ form.birth_year.errors }}
+                    </div>
+                </div>
+                <div class="row center">
+                    {{ form.terms_accept }} &nbsp; By entering this website you agree to Guinness Nigeria Plc's <a href="{% url 'terms_and_conditions' %}">Terms and conditions</a> and <a href="{% url 'privacy_policy' %}">Privacy &amp; Cookies</a> Notice
+                	{{ form.terms_accept.errors }}
+                </div>
+                <div class="row btns">
+                    <input type="submit" id="id_submit" value="Enter" />
+                </div>
+            </form>
+        </div>
+        <div class="age_legal"><span>2013 Guinness Nigeria</span> &nbsp;|&nbsp; <a href="http://www.drinkiq.com/" target="_blank">Drink Responsibly</a></div>
+    </div>
+
+    <div id="footer">
+        <div class="sr">
+            <div class="container">Not For Sale to Persons Under the Legal Purchase Age. Drink Responsibly</div>
+        </div>
+    </div><!--/Footer-->
+
+</div><!--/Wrap-->
+{% endblock %}
