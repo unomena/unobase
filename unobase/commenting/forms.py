@@ -24,6 +24,8 @@ class CustomCommentForm(forms.ModelForm):
                    'comment' : forms.Textarea,
                    'in_reply_to' : forms.HiddenInput,
                    }
+        
+        exclude = ('report_count',)
 
     def __init__(self, *args, **kwargs):
         super(CustomCommentForm, self).__init__(*args, **kwargs)

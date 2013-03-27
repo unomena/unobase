@@ -8,6 +8,6 @@ urlpatterns = patterns('',
 
     url(r'^answer$',
         views.PollAnswer.as_view(form_class=forms.PollAnswerForm,
-                                 template_name='poll/poll_results.html'),
+                                 template_name='poll/includes/poll_results.html'),
         name='poll_answer'),
 )
