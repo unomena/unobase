@@ -6,7 +6,7 @@
     {% csrf_token %}
     <div class="field">
         <label for="comment">Post a Comment</label>
-        {{ form.user }}{{ form.content_type }}{{ form.object_pk }}{{ form.submit_date }}{{ form.site }}{{ form.ip_address }}{{ form.is_public }}{{ form.comment }}{{ form.in_reply_to }}
+        {{ form.user }}{{ form.content_type }}{{ form.object_pk }}{{ form.submit_date }}{{ form.site }}{{ form.ip_address }}{{ form.is_public }}{{ form.comment }}{{ form.in_reply_to }}{{ form.report_count }}
     </div>
     <div class="field">
         {{ form.visible_to }}

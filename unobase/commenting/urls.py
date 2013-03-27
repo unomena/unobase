@@ -9,18 +9,22 @@ from unobase.commenting import forms
 urlpatterns = patterns('',
 
     url(r'^comment_form/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/$',
-        views.CustomCommentCreate.as_view(form_class=forms.CustomCommentForm,
-            template_name='commenting/comment_form.html'),
+        views.CustomCommentCreate.as_view(form_class=forms.CustomCommentForm, template_name='commenting/comment_form.html'),
         name='comment_create'),
 
     url(r'^comment_report/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/(?P<pk>\d+)/$',
-        views.CustomCommentReport.as_view(template_name='commenting/comment_list.html',
-                                          paginate_by=20),
+        views.CustomCommentReport.as_view(template_name='commenting/comment_list.html', paginate_by=20),
         name='comment_report'),
 
     url(r'^comment_list/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/$',
-        views.CustomCommentList.as_view(
-            paginate_by=20,
-            template_name='commenting/comment_list.html'),
+        views.CustomCommentList.as_view(paginate_by=2, template_name='commenting/comment_list.html'),
         name='comment_list'),
+                       
+    #Ajax calls
+    url(r'^comment_count/(?P<content_type_pk>\d+)/(?P<object_pk>\d+)/$', 
+        views.CustomCommentCount.as_view(), 
+        name='comment_count'),
+    
+    #url(r'^(?P<content_type>[\w\-\+_]+)/(?P<pk>\d+)/comment_list/$', 'comment_list', {}, 'comment_list'),
+    
 )

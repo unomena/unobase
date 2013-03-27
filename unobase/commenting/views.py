@@ -1,7 +1,7 @@
 __author__ = 'michael'
 
 from django.views import generic as generic_views
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
@@ -41,6 +41,8 @@ class CustomCommentListMixin(generic_views.ListView):
         context = super(CustomCommentListMixin, self).get_context_data(**kwargs)
 
         context['comment_count'] = self.comments.count()
+        context['object_pk'] = self.kwargs['object_pk']
+        context['content_type_pk'] = self.kwargs['content_type_pk']
         return context
     
     def get_queryset(self):
@@ -76,3 +78,25 @@ class CustomCommentList(CustomCommentListMixin):
     """
     List for comments
     """
+
+# ajax views
+class CustomCommentCount(generic_views.View):
+    """Renders a count of comments."""
+    
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(models.CustomComment.objects.filter(object_pk=self.kwargs['object_pk'], 
+                                                                content_type=self.kwargs['content_type_pk']).count())
+
+def comment_list(request, content_type, pk):
+    """Renders a list of comments."""
+    comments = Comment.objects.filter(
+        object_pk=pk, content_type__model=content_type
+    ).order_by('-submit_date')
+    # get the index where the list should start
+    start = request.GET.get('start', None)
+    if start:
+        start = int(start)
+        end = start + COMMENT_PAGE_SIZE
+        comments = comments[start:end]
+    context = RequestContext(request, {'comments': comments})
+    return render_to_response('comment_list.html', context)
