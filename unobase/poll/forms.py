@@ -2,8 +2,6 @@ __author__ = 'michael'
 
 from django import forms
 
-from preferences import preferences
-
 import collections
 
 class PollAnswerForm(forms.Form):
