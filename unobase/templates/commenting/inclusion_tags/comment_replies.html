@@ -1,0 +1,18 @@
+{% load commenting_extras %}
+
+{% for object in object_list %}
+	<div class="response">
+	    <div class="arrow"></div>
+	    <div class="group">
+	        <div class="avatar">{% if object.user.image %}<img src="{{ object.user.get_50x50_url }}" />{% endif %}</div>
+        <div class="meta">
+            <strong>{{ object.user.display_name }}</strong>
+            <span>{{ object.submit_date|timesince }} ago &nbsp;-&nbsp; <a href="#reply" onclick="reply('{{ object.user.display_name }}', '{{ object.pk }}');" >Reply</a> &nbsp;-&nbsp; <a href="#report">Report</a></span>
+        </div>
+        <div class="words">{{ object.comment }}</div>
+        
+        {% comment_replies object.id %}
+        
+	    </div>
+	</div><!--/response-->
+{% endfor %}

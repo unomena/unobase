@@ -1,0 +1,37 @@
+{% load unobase_tags %}
+
+<div class="comments_container">
+	{% include 'commenting/comment_list.html' %}
+</div>
+<div class="more"><a href="#more" class="btn_more">Show More Comments...</a></div>
+
+<script type="text/javascript">
+	
+	//More button pagination.
+	
+	var this_page_number = {{ page_obj.number }};
+	var total_pages = {{ page_obj.paginator.num_pages }};
+	console.log({{ page_obj.paginator.num_pages }});
+	if (this_page_number < total_pages){
+        $('a.btn_more').show();
+    }else{
+        $('a.btn_more').hide();
+    }
+	
+	$('a.btn_more').click(function () {
+	    var el = $(this)
+	    el.text('Loading More Comments...');
+	    $.ajax('{% url 'comment_list' content_type_pk object_pk %}?page=' + (this_page_number+1), {
+	        complete: function (xhr, status) {
+	            $('.comments_container').append(xhr.responseText);
+	            this_page_number = this_page_number + 1;
+	            if (this_page_number < total_pages){
+	                el.show().text('Show More Comments...'); 
+	            }else{
+	                el.hide();
+	            }
+	        }
+	    });
+	    return false;
+	});
+</script>

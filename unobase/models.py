@@ -57,6 +57,20 @@ class StateModel(models.Model):
 
 models.signals.class_prepared.connect(StateModel.set_permitted_manager)
 
+class RelatedModel(models.Model):
+    related = models.ManyToManyField('RelatedModel', blank=True, null=True)
+    related_leaf_content_type = models.ForeignKey(ContentType, editable=False, null=True)
+    
+    def as_leaf_class(self):
+        return self.related_leaf_content_type.model_class().objects.get(id=self.id)
+
+    def save(self, *args, **kwargs):
+        self.related_leaf_content_type = ContentType.objects.get_for_model(self.__class__) if not self.related_leaf_content_type else self.related_leaf_content_type
+        return super(RelatedModel, self).save(*args, **kwargs)
+    
+    def __unicode__(self):
+        return smart_unicode(self.as_leaf_class())
+
 class BaseModel(models.Model):
     """
     A model to keep track of what the leaf class looks like.
