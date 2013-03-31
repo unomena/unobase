@@ -75,7 +75,7 @@ class CustomCommentReport(CustomCommentListMixin):
     
             messages.success(self.request, 'Comment has been reported.')
         else:
-            messages.success(self.request, 'You have already reported this comment.')
+            messages.error(self.request, 'You have already reported this comment.')
         
         return super(CustomCommentReport, self).get(request, *args, **kwargs)
 
