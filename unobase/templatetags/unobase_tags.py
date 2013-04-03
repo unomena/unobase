@@ -32,28 +32,6 @@ def pagination(context, page_obj):
                     })
     return context
 
-@register.inclusion_tag('unobase/inclusion_tags/comment_pagination_ajax.html', takes_context=True)
-def comment_pagination_ajax(context, page_obj):
-    context = copy(context)
-    context.update({'page_obj': page_obj,
-                    'paginator': getattr(page_obj, 'paginator', None),
-                    })
-    return context
-
-@register.simple_tag(takes_context=True)
-def get_comment_count(context, object):
-    return utils.get_object_comment_list_for_user(context['user'], 
-                                                   commenting_models.CustomComment.objects.all(),
-                                                   object).count()
-    
-@register.simple_tag(takes_context=True)
-def get_comment_count_pluralize(context, object):
-    
-    if get_comment_count(context, object) == 1:
-        return ''
-    else:
-        return 's'
-
 @register.tag
 def smart_query_string(parser, token):
     """

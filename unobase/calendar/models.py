@@ -23,7 +23,7 @@ class Venue(models.Model):
     address = models.CharField(max_length=512, help_text='Physical venue address.')
 
     def __unicode__(self):
-        return self.name
+        return '%s, %s' % (self.name, self.address)
 
 class Event(ContentModel):
     
@@ -38,7 +38,7 @@ class Event(ContentModel):
                               help_text='Venue where the event will take place.',
                               )
     start = models.DateTimeField(db_index=True)
-    end = models.DateField(db_index=True)
+    end = models.DateTimeField(blank=True, null=True)
     
     repeat = models.CharField(
         max_length=64,
@@ -66,6 +66,17 @@ class Event(ContentModel):
     @property
     def duration(self):
         return self.end - self.start
+    
+    @property
+    def in_same_month(self):
+        if self.start.year == self.end.year and self.start.month == self.end.month:
+            return True
+        return False
+    
+    @property
+    def same_day(self):
+        if self.start == self.end:
+            return True
 
     @property
     def next(self):
@@ -93,4 +104,9 @@ class Event(ContentModel):
             return self.start
         else:
             return datetime.combine(self.repeat_until, self.start.timetz())
+        
+    def save(self, *args, **kwargs):
+        if not self.end:
+            self.end = self.start
+        return super(Event, self).save(*args, **kwargs)
         
