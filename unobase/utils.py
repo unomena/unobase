@@ -1,3 +1,5 @@
+import hashlib
+
 from django.conf import settings
 from django.core.mail import get_connection, EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -90,4 +92,5 @@ def get_object_comment_list_for_user(user, comments_qs, obj):
     
     return comments
     
-
+def get_token_for_user(user):
+    return hashlib.md5(user.email + settings.SECRET_KEY).hexdigest()
