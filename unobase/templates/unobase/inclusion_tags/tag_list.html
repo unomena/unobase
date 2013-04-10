@@ -1,8 +1,8 @@
 <div class="tags">
     {% for tag in tags %}
         <div class="tagged">
-            {% if user.profile.is_admin %}
-                <a href="javascript: void(0);" class="tag {% if user.profile.is_admin %}tag_open{% endif %}"><span class="tag_l"></span><span>{{ tag.title }}</span><span class="tag_r"></span></a>
+            {% if user.is_admin %}
+                <a href="javascript: void(0);" class="tag {% if user.is_admin %}tag_open{% endif %}"><span class="tag_l"></span><span>{{ tag.title }}</span><span class="tag_r"></span></a>
             {% else %}
                 <span class="tag">{{ tag.title }}</span>
             {% endif %}

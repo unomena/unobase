@@ -4,6 +4,7 @@ from django.views import generic as generic_views
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from unobase.views import ListWithDetailView
 from unobase.forum import models
@@ -39,7 +40,7 @@ class ForumCategoryCreate(mixins.LoginRequiredMixin, mixins.PermissionRequiredMi
                 'forum' : models.Forum.objects.get(slug=self.kwargs['slug'])}
 
     def get_success_url(self):
-        return '/support/forum/%s/' % self.object.forum.slug
+        return reverse('forum_detail', args=(self.object.forum.slug,))
 
 class ForumCategoryUpdate(mixins.LoginRequiredMixin, mixins.PermissionRequiredMixin, generic_views.UpdateView):
 
@@ -50,7 +51,7 @@ class ForumCategoryUpdate(mixins.LoginRequiredMixin, mixins.PermissionRequiredMi
         return {'user' : self.request.user}
 
     def get_success_url(self):
-        return '/support/forum/%s/' % self.object.forum.slug
+        return reverse('forum_detail', args=(self.object.forum.slug,))
 
     def get_queryset(self):
         return models.ForumCategory.objects.all()
@@ -64,7 +65,7 @@ class ForumCategoryDelete(mixins.LoginRequiredMixin, mixins.PermissionRequiredMi
         return models.ForumCategory.objects.all()
 
     def get_success_url(self):
-        return '/support/forum/%s/' % self.object.forum.slug
+        return reverse('forum_detail', args=(self.object.forum.slug,))
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -94,9 +95,9 @@ class ForumThreadCreate(mixins.LoginRequiredMixin, generic_views.CreateView):
                 'category': models.ForumCategory.objects.get(slug=self.kwargs['slug'])}
 
     def get_success_url(self):
-        return '/support/forum/%s/category/%s/thread/%s/' % \
-               (self.object.category.forum.slug,
-                self.object.category.slug, self.object.slug)
+        return reverse('forum_thread_detail', args=(self.object.category.forum.slug, 
+                                                    self.object.category.slug, 
+                                                    self.object.slug))
 
 class ForumThreadUpdate(mixins.LoginRequiredMixin, mixins.PermissionOrCreatorRequiredMixin, generic_views.UpdateView):
 
@@ -107,9 +108,9 @@ class ForumThreadUpdate(mixins.LoginRequiredMixin, mixins.PermissionOrCreatorReq
         return {'user' : self.request.user}
 
     def get_success_url(self):
-        return '/support/forum/%s/category/%s/thread/%s/' %\
-               (self.object.category.forum.slug,
-                self.object.category.slug, self.object.slug)
+        return reverse('forum_thread_detail', args=(self.object.category.forum.slug, 
+                                                    self.object.category.slug, 
+                                                    self.object.slug))
 
     def get_queryset(self):
         return models.ForumThread.objects.all()
@@ -130,9 +131,9 @@ class ForumThreadDelete(mixins.LoginRequiredMixin, mixins.PermissionRequiredMixi
         return models.ForumThread.objects.all()
 
     def get_success_url(self):
-        return '/support/forum/%s/category/%s/' %\
-               (self.object.category.forum.slug,
-                self.object.category.slug)
+        return reverse('forum_thread_detail', args=(self.object.category.forum.slug, 
+                                                    self.object.category.slug, 
+                                                    self.object.slug))
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -153,9 +154,9 @@ class ForumPostCreate(mixins.LoginRequiredMixin, generic_views.CreateView):
                 'thread': models.ForumThread.objects.get(slug=self.kwargs['slug'])}
 
     def get_success_url(self):
-        return '/support/forum/%s/category/%s/thread/%s/' %\
-               (self.object.thread.category.forum.slug,
-                self.object.thread.category.slug, self.object.thread.slug)
+        return reverse('forum_thread_detail', args=(self.object.thread.category.forum.slug, 
+                                                    self.object.thread.category.slug, 
+                                                    self.object.thread.slug))
 
 class ForumPostUpdate(mixins.LoginRequiredMixin, generic_views.UpdateView):
 
@@ -163,9 +164,9 @@ class ForumPostUpdate(mixins.LoginRequiredMixin, generic_views.UpdateView):
         return {'user' : self.request.user}
 
     def get_success_url(self):
-        return '/support/forum/%s/category/%s/thread/%s/' %\
-               (self.object.thread.category.forum.slug,
-                self.object.thread.category.slug, self.object.thread.slug)
+        return reverse('forum_thread_detail', args=(self.object.thread.category.forum.slug, 
+                                                    self.object.thread.category.slug, 
+                                                    self.object.thread.slug))
 
     def get_queryset(self):
         return models.ForumPost.objects.all()
@@ -183,9 +184,9 @@ class ForumPostDelete(mixins.LoginRequiredMixin, generic_views.DeleteView):
         return models.ForumPost.objects.all()
 
     def get_success_url(self):
-        return '/support/forum/%s/category/%s/thread/%s/' %\
-               (self.object.thread.category.forum.slug,
-                self.object.thread.category.slug, self.object.thread.slug)
+        return reverse('forum_thread_detail', args=(self.object.thread.category.forum.slug, 
+                                                    self.object.thread.category.slug, 
+                                                    self.object.thread.slug))
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

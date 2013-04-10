@@ -3,13 +3,13 @@ __author__ = 'michael'
 from django import forms
 
 from unobase import constants
-from unobase.forms import Content
+from unobase.forms import Content, State
 from unobase.forum import models
 
-class ForumCategory(Content):
+class ForumCategory(Content, State):
     class Meta(Content.Meta):
         model = models.ForumCategory
-        fields = Content.Meta.fields + ['forum']
+        fields = Content.Meta.fields + ['forum', 'state']
 
     def __init__(self, *args, **kwargs):
         super(ForumCategory, self).__init__(*args, **kwargs)
@@ -29,10 +29,10 @@ class ForumCategory(Content):
         #self.cleaned_data['forum'] =
         return super(ForumCategory, self).save(*args, **kwargs)
 
-class ForumThread(Content):
+class ForumThread(Content, State):
     class Meta(Content.Meta):
         model = models.ForumThread
-        fields = Content.Meta.fields + ['category']
+        fields = Content.Meta.fields + ['category', 'state']
 
     def __init__(self, *args, **kwargs):
         super(ForumThread, self).__init__(*args, **kwargs)
@@ -52,10 +52,10 @@ class ForumThread(Content):
         #self.cleaned_data['category'] =
         return super(ForumThread, self).save(*args, **kwargs)
 
-class ForumPost(Content):
+class ForumPost(Content, State):
     class Meta(Content.Meta):
         model = models.ForumPost
-        fields = Content.Meta.fields + ['thread']
+        fields = Content.Meta.fields + ['thread', 'state']
 
     def __init__(self, *args, **kwargs):
         super(ForumPost, self).__init__(*args, **kwargs)

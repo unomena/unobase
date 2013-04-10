@@ -11,6 +11,12 @@ import constants
 
 from tagging import models as tagging_models
 
+class State(forms.ModelForm):
+    
+    class Meta:
+        model = models.StateModel
+        
+        fields = ['state', 'publish_date_time', 'retract_date_time']
 
 class Content(forms.ModelForm):
     comma_seperated_tags = forms.CharField(max_length=512, required=False)
@@ -19,9 +25,7 @@ class Content(forms.ModelForm):
     class Meta:
         model = models.ContentModel
 
-        fields = ['state', 'image', 'publish_date_time', 'retract_date_time', 'title',
-                  'content', 'modified_by', 'created_by',
-                  'tags']
+        fields = ['image', 'title','content', 'modified_by', 'created_by', 'tags']
 
         widgets = {'image' : forms.FileInput,
                    'modified_by' : forms.HiddenInput,

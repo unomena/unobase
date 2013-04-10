@@ -91,7 +91,7 @@ class TagModel(BaseModel):
     """
     A model to keep track of tags related to it.
     """
-    tags = models.ManyToManyField('tagging.Tag', null=True, blank=True)
+    tags = models.ManyToManyField('tagging.Tag', related_name='tag_models', null=True, blank=True)
     
     @staticmethod
     def get_tags(model_type):

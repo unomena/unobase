@@ -1,15 +1,17 @@
-{% load unobase_tags %}
+{% load commenting_extras %}
 
-<h3>Comments</h3>
-{% include 'unobase/includes/message_error_header.html' %}
+<h3>{% get_comment_count form.object %} Comment{% get_comment_count_pluralize form.object %}</h3>
+<div class="comment_notifications">
+	{% include 'unobase/includes/message_error_header.html' %}
+</div>
 <form id="comment_form" name="comment_form" id="comment_form" action="{% url 'comment_create' form.object_content_type.id form.object.id %}" method="POST">
     {% csrf_token %}
     <div class="field">
-        <label for="comment">Post a Comment</label>
-        {{ form.user }}{{ form.content_type }}{{ form.object_pk }}{{ form.submit_date }}{{ form.site }}{{ form.ip_address }}{{ form.is_public }}{{ form.comment }}{{ form.in_reply_to }}{{ form.report_count }}
+    	{{ form.user }}{{ form.content_type }}{{ form.object_pk }}{{ form.submit_date }}{{ form.site }}{{ form.ip_address }}{{ form.is_public }}{{ form.in_reply_to }}
+        <input type="text" name="comment" id="id_comment" placeholder="Post a comment..." />
     </div>
-    <div class="field">
-        {{ form.visible_to }}
-        <input type="submit" id="submit" value="Post Comment" class="btn" />
+    <div class="btns">
+    	{{ form.visible_to }}
+        <input type="submit" id="submit" />
     </div>
 </form>

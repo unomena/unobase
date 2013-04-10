@@ -5,7 +5,7 @@ from django.db import models
 from unobase import models as unobase_models
 from unobase.support import constants
 
-class Case(unobase_models.TagOnlyContentModel):
+class Case(unobase_models.ContentModel):
     status = models.PositiveSmallIntegerField(choices=constants.CASE_STATUS_CHOICES, default=constants.CASE_STATUS_NEW)
     origin = models.PositiveSmallIntegerField(choices=constants.CASE_ORIGIN_CHOICES, default=constants.CASE_ORIGIN_WEB)
     type = models.PositiveSmallIntegerField(blank=True, null=True, choices=constants.CASE_TYPE_CHOICES)
