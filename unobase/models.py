@@ -139,7 +139,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     default_image_category = None
 
     title = models.CharField(max_length=200)
-    description = RichTextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=255, editable=False, db_index=True, unique=True)
     content = RichTextField(blank=True, null=True)
     
