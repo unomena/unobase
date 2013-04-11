@@ -1,0 +1,31 @@
+{% extends 'console/base.html' %}
+
+{% block title %}Blog Entry{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container console">
+            <h1>Blog Entry</h1>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th width="80">State:</th>
+                        <td>{{ object.get_state_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ object.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Content</th>
+                        <td>{{ object.content|safe }}</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td><a href="{% url 'console_blog_entry_update' object.pk %}" class="link btn btn-edit">Edit</a> &nbsp; <a href="{% url 'console_blog_entry_delete' object.pk %}" class="link btn_light btn-delete">Delete</a></td>
+                    </tr>
+                </table>
+            </div><!--/content-->
+        </div>
+    </div>
+{% endblock %}

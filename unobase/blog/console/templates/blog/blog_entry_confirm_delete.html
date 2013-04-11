@@ -1,0 +1,4 @@
+{% extends 'confirm_delete_base.html' %}
+
+{% block confirm_delete_url %}{% url 'console_blog_entry_delete' object.pk %}{% endblock %}
+{% block decline_delete_url %}{% url 'console_blog_entry_list' %}{% endblock %}

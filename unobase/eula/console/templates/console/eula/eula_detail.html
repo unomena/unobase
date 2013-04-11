@@ -1,0 +1,26 @@
+{% extends 'console/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="title">
+	   <h1>EULA</h1>
+	   <div class="toolbar"><a href="{% url 'console_eula_list' %}">Back to List</a></div>
+    </div>
+	<table>
+    	<tbody>
+    		<tr>
+   				<th>Title</th>
+    			<td>{{ object.title }}</td>
+    		</tr>
+    		<tr>
+    			<th>&nbsp;</th>
+    			<td>
+    				<a href="{% url 'console_eula_update' object.pk %}">Edit&nbsp;&raquo;</a> &nbsp; &nbsp;
+                    <a href="{% url 'console_eula_delete' object.pk %}">Delete&nbsp;&raquo;</a> 
+    			</td>
+    		</tr>
+    	</tbody>
+    </table>
+    <div class="clear"></div>
+</div>
+{% endblock %}

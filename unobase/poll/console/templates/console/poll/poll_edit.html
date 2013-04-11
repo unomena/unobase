@@ -1,0 +1,46 @@
+{% extends 'console/base.html' %}
+
+{% block content %}
+<script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+<div class="container">
+    <div class="title">
+    	<h1>{% if form.instance.id %}Edit{% else %}Add{% endif %} Poll</h1>
+    	<div class="toolbar"><a href="{% url 'console_poll_list' %}">Back to List</a></div>
+    </div>
+	<form id="frmUpdatePoll" action="." method="post">
+		<div class="field">
+    		<label for="id_question">Question</label>
+    		{{ form.question }}{{ form.question.errors }}
+    	</div>
+    	<div class="field">
+    		<label for="id_multiple_choice">Multiple Choice?</label>
+    		{{ form.multiple_choice }}{{ form.multiple_choice.errors }}
+    	</div>
+		<div class="versions">
+        	<h2>Answers</h2>
+            <div class="inlines">
+            	{{ formset.management_form }}
+        	    {% for form in formset.forms %}
+        	    	<div class="inline {{ formset.prefix }}">
+                        <a href="javascript: void(0);" class="version_name">{% if form.answer.value %}Answer {{ form.answer.value }}{% else %}New Answer{% endif %}</a>
+                        <div {% if not form.instance.id %}style="display: block;"{% endif %} class="version_content">
+                        	{% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
+                        	{% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+            		    	<div class="field">
+            		    		<label for="id_answer">Answer</label>
+            		    		{{ form.answer }}{{ form.answer.errors }}
+            		    	</div>
+            		    	<input type="hidden" id="id_answers-{{ forloop.counter0 }}-vote_count" name="answers-{{ forloop.counter0 }}-vote_count" value="0">
+                        </div>
+        	    	</div>
+        	    {% endfor %}
+            </div>
+        </div>
+    	<div class="btns">
+    		<input type="submit" value="{% if not form.instance.id %}Create{% else %}Update{% endif %} Poll" />
+    	</div>
+        {% csrf_token %}
+    </form>
+    <div class="clear"></div>
+</div>
+{% endblock %}

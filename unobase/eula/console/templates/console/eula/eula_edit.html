@@ -1,0 +1,46 @@
+{% extends 'console/base.html' %}
+
+{% block content %}
+<script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+<div class="container">
+    <div class="title">
+    	<h1>{% if form.instance.id %}Edit{% else %}Add{% endif %} EULA</h1>
+    	<div class="toolbar"><a href="{% url 'console_eula_list' %}">Back to List</a></div>
+    </div>
+	<form id="frmUpdateEULA" action="." method="post">
+		<div class="field">
+    		<label for="id_title">Title</label>
+    		{{ form.title }}{{ form.title.errors }}
+    	</div>
+		<div class="versions">
+        	<h2>Versions</h2>
+            <div class="inlines">
+            	{{ formset.management_form }}
+        	    {% for form in formset.forms %}
+        	    	<div class="inline {{ formset.prefix }}">
+                        <a href="javascript: void(0);" class="version_name">{% if form.version.value %}Version {{ form.version.value }}{% else %}New Version{% endif %}</a>
+                        <div {% if not form.instance.id %}style="display: block;"{% endif %} class="version_content">
+                        	{% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
+                        	{% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+            		    	<div class="field">
+            		    		<label for="id_version">Version</label>
+            		    		{{ form.version }}{{ form.version.errors }}
+            		    	</div>
+            		    	<div class="clear"></div>
+            		    	<div class="field">
+            		    		<label for="id_content">Content</label>
+            		    		{{ form.content }}{{ form.content.errors }}
+            		    	</div>
+                        </div>
+        	    	</div>
+        	    {% endfor %}
+            </div>
+        </div>
+    	<div class="btns">
+    		<input type="submit" value="{% if not form.instance.id %}Create{% else %}Update{% endif %} EULA" />
+    	</div>
+        {% csrf_token %}
+    </form>
+    <div class="clear"></div>
+</div>
+{% endblock %}

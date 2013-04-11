@@ -8,9 +8,8 @@ from unobase import views as unobase_views
 from unobase import mixins as unobase_mixins
 from unobase.email_tracking import models, forms
 
-class OutboundEmailList(unobase_mixins.RoleCheckMixin, unobase_mixins.FilterMixin, generic_views.ListView):
+class OutboundEmailList(unobase_mixins.ConsoleUserRequiredMixin, unobase_mixins.FilterMixin, generic_views.ListView):
 
-    role_required = settings.OUTBOUND_EMAIL_ROLE
     raise_exception = True
 
     allowed_filters = {
