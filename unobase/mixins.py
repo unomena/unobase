@@ -378,11 +378,11 @@ class AgeGateMixin(object):
         country_date_of_birth_required = request.session.get('country_date_of_birth_required')
         
         if user_date_of_birth is not None and country_date_of_birth_required is not None:
-            if  user_date_of_birth > country_date_of_birth_required:  # If the user is a standard user,
+            if  user_date_of_birth > country_date_of_birth_required:  # If the user is below the minimum age,
                 if self.raise_exception:  # *and* if an exception was desired
                     raise PermissionDenied  # return a forbidden response.
                 else:
-                    return redirect_to_age_gate(request.get_full_path(), self.age_gate_url)
+                    return HttpResponseRedirect(reverse('age_gate_failure'))
         else:
             if self.raise_exception:  # *and* if an exception was desired
                 raise PermissionDenied  # return a forbidden response.

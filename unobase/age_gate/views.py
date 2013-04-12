@@ -10,6 +10,9 @@ from django.conf import settings
 
 import datetime
 
+class AgeGateFailure(generic_views.TemplateView):
+    pass
+
 class AgeGate(generic_views.FormView):
     
     def get_initial(self):
