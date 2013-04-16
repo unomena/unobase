@@ -1,6 +1,7 @@
 __author__ = 'michael'
 
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from unobase import models as unobase_models
 
@@ -21,6 +22,11 @@ class ForumThread(unobase_models.ContentModel, unobase_models.StateModel):
         ordering = ['-created']
         verbose_name_plural = 'Forum thread'
         permissions = (('can_moderate', 'Can moderate forum thread'),)
+    
+    def get_absolute_url(self):    
+        return reverse('forum_thread_detail', args=(self.category.forum.slug, 
+                                                    self.category.slug, 
+                                                    self.slug))
 
 class ForumPost(unobase_models.ContentModel, unobase_models.StateModel):
     thread = models.ForeignKey(ForumThread)
