@@ -10,6 +10,10 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>[\w-]+)/$',
         views.ForumDetail.as_view(paginate_by=6, template_name='forum/forum_detail.html'),
         name='forum_detail'),
+                       
+     url(r'^tagged/list/(?P<slug>[\w-]+)/$',
+        views.ForumTaggedList.as_view(paginate_by=20, template_name='forum/forum_tagged_list.html'),
+        name='forum_tagged_list'),
 
     # Forum category
 

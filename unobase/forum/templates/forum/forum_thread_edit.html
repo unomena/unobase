@@ -39,6 +39,13 @@
                                 <div>{{ form.comma_seperated_tags }}{{ form.comma_seperated_tags.errors }}</div>
                             </div>
                         </div>
+                        
+                        <div class="row">
+                            <div class="field">
+                                <label>Publish Date/Time</label>
+                                <div>{{ form.publish_date_time }}{{ form.publish_date_time.errors }}</div>
+                            </div>
+                        </div>
 
                         <div class="buttons">
                             <input type="submit" id="submit" value="{% if not form.instance.id %}Create{% else %}Update{% endif %} Topic" class="btn" />

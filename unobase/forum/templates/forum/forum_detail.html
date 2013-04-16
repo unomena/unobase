@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load unobase_tags %}
+{% load unobase_tags forum_widgets %}
 
 {% block title %}Forum{% endblock %}
 
@@ -9,6 +9,7 @@
             <h1>{{ object.title }}</h1>
             <div class="content">
                 <div class="sidebar">
+                	{% tag_cloud object.slug %}
                     {% if perms.forum.can_moderate %}
                         <div class="widget">
                             <h3>Create a New Category</h3>

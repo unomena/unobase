@@ -7,9 +7,11 @@
     }
 
     $(document).ready(function() {
-        $('#comment_form_div').load("{% url 'comment_create' content_type.id object.id %}", function() {
-            $('#comment_form').ajaxForm(options);
-        });
+    	{% if user.is_authenticated %}
+	        $('#comment_form_div').load("{% url 'comment_create' content_type.id object.id %}", function() {
+	            $('#comment_form').ajaxForm(options);
+	        });
+        {% endif %}
         $('#comment_list_div').load("{% url 'comment_list' content_type.id object.id %}");
     });
 

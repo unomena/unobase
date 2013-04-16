@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Board Members{% endblock %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <h1>Board Member</h1>
+        <div class="content">
+            <div class="column">
+                <div class="listing">
+                    <h3>{{ object.title }}{% if object.job_title %}, {{ object.job_title }}{% endif %}</h3>
+                    {% if object.get_202x126_url %}
+                        <img src="{{ object.get_202x126_url }}" class="image_third" />
+                    {% endif %}
+                    {{ object.content|safe }}
+                </div>
+                <div class="back_to_list"><a href="{% url 'corporate_site_board_member_list' %}" class="btn btn_light">&laquo; Back To List</a></div>
+            </div>
+        </div><!--/content-->
+    </div>
+</div>
+{% endblock %}

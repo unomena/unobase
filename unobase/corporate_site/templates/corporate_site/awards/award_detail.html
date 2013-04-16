@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Awards{% endblock %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <h1>Award</h1>
+        <div class="content">
+            <div class="column column_full">
+                <div class="listing">
+                    <h3>{{ object.title }}</h3>
+                    {{ object.content|safe }}
+                </div>
+                <div class="back_to_list"><a href="{% url 'corporate_site_awards_list' %}" class="btn btn_light">&laquo; Back To List</a></div>
+            </div>
+        </div><!--/content-->
+    </div>
+</div>
+{% endblock %}

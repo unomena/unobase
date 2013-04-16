@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Vacancies{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h1>Vacancies</h1>
+            <div class="content">
+                <div class="column">
+	                {% for object in object_list %}
+	                    <div class="listing">
+                            <h3>{{ object.title }}</h3>
+	                        <p>{{ object.content|safe }}</p>
+	                        {% if object.external_link %}
+	                            <p><a href="{{ object.external_link }}" class="link" target="_blank">Learn More</a></p>
+	                        {% endif %}
+	                    </div>
+	                {% empty %}
+	                    <p>There are no vacancies to display.</p>
+	                {% endfor %}
+                </div>
+                <div class="clear"></div>
+            </div><!--/content-->
+        </div>
+    </div>
+{% endblock %}

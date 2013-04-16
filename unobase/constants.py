@@ -1,4 +1,7 @@
 from settings import DEFAULT_IMAGE_CATEGORY_CHOICES
+from unobase.corporate_site import constants as corporate_site_constants
+
+DEFAULT_IMAGE_CATEGORY_CHOICES += corporate_site_constants.CORPORATE_SITE_IMAGE_CATEGORY_CHOICES
 
 STATE_PUBLISHED = 0
 STATE_UNPUBLISHED = 1

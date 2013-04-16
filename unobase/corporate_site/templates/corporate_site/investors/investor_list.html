@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load unobase_tags %}
+
+{% block title %}Investors{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h1>Investors</h1>
+            <div class="content">
+                <div class="column">
+	                {% for object in object_list %}
+                        <div class="listing">
+                            {% if object.get_202x126_url %}
+                            <a href="#"><img src="{{ object.get_202x126_url }}" class="image_third" /></a>
+                            {% endif %}
+                            <h3>{{ object.title }}</h3>
+                            <p>{{ object.content|safe }}</p>
+                            <p><a href="{% url 'corporate_site_investor_detail' object.pk %}" class="link">Read More</a></p>
+                        </div>
+                    {% empty %}
+                        <p>There are no investors to display.</p>
+                    {% endfor %}
+                </div>
+                {% pagination page_obj %}
+                <div class="clear"></div>
+            </div><!--/content-->
+        </div>
+    </div>
+{% endblock %}

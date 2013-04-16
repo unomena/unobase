@@ -10,6 +10,19 @@ from unobase.views import ListWithDetailView
 from unobase.forum import models
 from unobase import mixins, constants
 
+class ForumTaggedList(ListWithDetailView):
+    
+    def get_object(self):
+        return get_object_or_404(models.Forum,
+            slug=self.kwargs['slug'])
+    
+    def get_queryset(self):
+        if self.request.GET.has_key('filter_by_tag') and self.request.GET['filter_by_tag'].strip():
+            return models.ForumThread.objects.filter(category__forum=self.object, state=constants.STATE_PUBLISHED,
+                                                     tags__title__iexact=self.request.GET['filter_by_tag'].strip())
+
+        return models.ForumThread.objects.filter(category__forum=self.object, state=constants.STATE_PUBLISHED)
+
 class ForumDetail(ListWithDetailView):
 
     def get_object(self):

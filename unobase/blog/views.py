@@ -1,13 +1,10 @@
-import models
-
-__author__ = 'michael'
-
 from django.views import generic as generic_views
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 
 from unobase import constants as unobase_constants
 from unobase import views as unobase_views
+from unobase.blog import models
 
 class BlogDetail(unobase_views.ListWithDetailView):
 

@@ -1,12 +1,13 @@
 __author__ = 'michael'
 
 from django import forms
+from django.utils import timezone
 
 from unobase import constants
 from unobase.forms import Content, State
 from unobase.forum import models
 
-class ForumCategory(Content, State):
+class ForumCategory(Content):
     class Meta(Content.Meta):
         model = models.ForumCategory
         fields = Content.Meta.fields + ['forum', 'state']
@@ -24,15 +25,10 @@ class ForumCategory(Content, State):
         if self.forum is not None:
             self.fields['forum'].initial = self.forum
 
-    def save(self, *args, **kwargs):
-        #self.cleaned_data['state'] =
-        #self.cleaned_data['forum'] =
-        return super(ForumCategory, self).save(*args, **kwargs)
-
-class ForumThread(Content, State):
+class ForumThread(Content):
     class Meta(Content.Meta):
         model = models.ForumThread
-        fields = Content.Meta.fields + ['category', 'state']
+        fields = Content.Meta.fields + ['category', 'state', 'publish_date_time']
 
     def __init__(self, *args, **kwargs):
         super(ForumThread, self).__init__(*args, **kwargs)
@@ -48,11 +44,19 @@ class ForumThread(Content, State):
             self.fields['category'].initial = self.category
 
     def save(self, *args, **kwargs):
-        #self.cleaned_data['state'] =
-        #self.cleaned_data['category'] =
-        return super(ForumThread, self).save(*args, **kwargs)
+        commit = kwargs.pop('commit', True)
+        
+        instance = super(ForumThread, self).save(*args, commit=False, **kwargs)
+        
+        if self.cleaned_data['publish_date_time'] > timezone.now():
+            instance.state = constants.STATE_UNPUBLISHED
+        
+        if commit:
+            instance.save()
+        
+        return instance
 
-class ForumPost(Content, State):
+class ForumPost(Content):
     class Meta(Content.Meta):
         model = models.ForumPost
         fields = Content.Meta.fields + ['thread', 'state']
@@ -72,8 +76,3 @@ class ForumPost(Content, State):
 
         if self.thread is not None:
             self.fields['thread'].initial = self.thread
-
-    def save(self, *args, **kwargs):
-        #self.cleaned_data['state'] =
-        #self.cleaned_data['category'] =
-        return super(ForumPost, self).save(*args, **kwargs)

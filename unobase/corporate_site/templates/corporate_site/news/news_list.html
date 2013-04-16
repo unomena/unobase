@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load unobase_tags %}
+
+{% block title %}News{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h1>News</h1>
+            <div class="content">
+                <div class="column">
+	                {% for object in object_list %}
+	                    <div class="third">
+	                        <a href="#"><img src="{{ object.get_202x126_url }}" class="image_third" /></a>
+                            <h3>{{ object.title }}</h3>
+	                        <p>{{ object.content|safe|truncatewords:"20" }} ...</p>
+	                        <p><a href="{% url 'corporate_site_news_detail' object.pk %}">Read more</a></p>
+	                    </div>
+	                {% empty %}
+	                    <p>There is no news to display.</p>
+	                {% endfor %}
+                </div>
+                {% pagination page_obj %}
+                <div class="clear"></div>
+            </div><!--/content-->
+        </div>
+    </div>
+{% endblock %}
