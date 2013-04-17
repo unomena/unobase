@@ -11,6 +11,3 @@ from unobase import utils as unobase_utils
 
 class AdminMixin(unobase_mixins.ConsoleUserRequiredMixin):
     raise_exception = False
-
-class Console(AdminMixin, generic_views.TemplateView):
-    pass

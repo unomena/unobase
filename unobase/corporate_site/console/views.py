@@ -11,6 +11,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from unobase import mixins as unobase_mixins
 from unobase import views as unobase_views
 from unobase import constants as unobase_constants
+from unobase import utils as unobase_utils
 
 from unobase.corporate_site import models as corporate_site_models
 
@@ -555,3 +556,22 @@ class TeamList(AdminMixin, generic_views.ListView):
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.all()
+    
+# Content Images
+
+class ContentImageUrl(AdminMixin, generic_views.View):
+
+    def get(self, request, *args, **kwargs):
+
+        content_type = kwargs['content_type']
+
+        if content_type == 'event':
+            content_object = get_object_or_404(corporate_site_models.Event, pk=kwargs['pk'])
+        elif content_type == 'media_coverage':
+            content_object = get_object_or_404(corporate_site_models.MediaCoverage, pk=kwargs['pk'])
+        elif content_type == 'news':
+            content_object = get_object_or_404(corporate_site_models.News, pk=kwargs['pk'])
+        elif content_type == 'award':
+            content_object = get_object_or_404(corporate_site_models.Award, pk=kwargs['pk'])
+
+        return unobase_utils.respond_with_json({'url': content_object.get_120x120_url()})

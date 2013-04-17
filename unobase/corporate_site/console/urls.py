@@ -279,4 +279,9 @@ urlpatterns = patterns('',
         views.TeamList.as_view(template_name='console/corporate_site/team/team_list.html',
                                  paginate_by=10),
         name='console_team_list'),
+                       
+    # Content Images
+    url(r'^content/image/url/(?P<content_type>\w+)/(?P<pk>\d+)/$',
+        views.ContentImageUrl.as_view(),
+        name='console_news_and_events_content_image_url'),
 )
