@@ -13,6 +13,10 @@ from unobase.commenting import models as commenting_models
 
 register = template.Library()
 
+@register.filter
+def letterify(value):
+    return str(unichr(65 + value))
+
 @register.tag
 def breadcrumb(parser, token):
     """
@@ -122,7 +126,7 @@ def create_crumb(title, url=None):
     if url:
         crumb = "%s<a href='%s'>%s</a>" % (crumb, url, title)
     else:
-        crumb = "%s&nbsp;&nbsp;%s" % (crumb, title)
+        crumb = "%s&nbsp;%s" % (crumb, title)
 
     return crumb
 

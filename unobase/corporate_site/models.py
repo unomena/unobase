@@ -9,26 +9,26 @@ from unobase import models as unobase_models
 from unobase.calendar import models as calendar_models
 from unobase.corporate_site import constants
 
-class Article(unobase_models.ContentModel, unobase_models.RelatedModel):
+class Article(unobase_models.StatefulContentModel, unobase_models.RelatedModel):
     "An article"
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
 
-class News(Article, unobase_models.StateModel):
+class News(Article):
     "News about the company"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_NEWS
 
-class Award(Article, unobase_models.StateModel):
+class Award(Article):
     "Company's awards"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_AWARD
     
 
-class PressRelease(Article, unobase_models.StateModel):
+class PressRelease(Article):
     "Company's press releases"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_PRESS_RELEASE
     
     pdf = models.FileField(upload_to='press_releases', blank=True, null=True)
 
-class MediaCoverage(Article, unobase_models.StateModel):
+class MediaCoverage(Article):
     "Media coverage about the company"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_MEDIA_COVERAGE
 
@@ -45,14 +45,14 @@ class Vacancy(unobase_models.ContentModel, unobase_models.StateModel):
     "Job vacancies within the company"
     external_link = models.URLField(blank=True, null=True)
     
-class Product(unobase_models.ContentModel, unobase_models.RelatedModel, unobase_models.StateModel):
+class Product(unobase_models.StatefulContentModel, unobase_models.RelatedModel):
     "Products a company is selling"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_PRODUCT
     
     file = models.FileField(upload_to='products', blank=True, null=True)
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
     
-class CompanyMember(unobase_models.ContentModel, unobase_models.StateModel):
+class CompanyMember(unobase_models.StatefulContentModel):
     "Members of the company"
     
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_COMPANY_MEMBER

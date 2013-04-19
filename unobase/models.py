@@ -39,6 +39,7 @@ class StateModel(models.Model):
     retract_date_time = models.DateTimeField(blank=True, null=True)
     
     objects = models.Manager()
+    permitted = StateManager()
 
     class Meta():
         ordering = ['-publish_date_time']
@@ -49,13 +50,6 @@ class StateModel(models.Model):
             self.publish_date_time = timezone.now()
             
         return super(StateModel, self).save(*args, **kwargs)
-
-    @staticmethod
-    def set_permitted_manager(sender, **kwargs):
-        if issubclass(sender, StateModel) and not hasattr(sender, 'permitted'):
-            sender.add_to_class('permitted', StateManager())
-
-models.signals.class_prepared.connect(StateModel.set_permitted_manager)
 
 class RelatedModel(models.Model):
     related = models.ManyToManyField('RelatedModel', blank=True, null=True)
@@ -164,7 +158,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
         if not slug:
             slug = 'no-title'
             
-        query = ContentModel.objects.filter(
+        query = self.__class__.objects.filter(
             slug__startswith=slug
         ).exclude(id=obj.id).order_by('-id')
     
@@ -188,6 +182,12 @@ class ContentModel(ImageModel, TagModel, AuditModel):
             self.image = DefaultImage.permitted.get_random(self.default_image_category)
 
         return super(ContentModel, self).save(*args, **kwargs)
+    
+class StatefulContentModel(ContentModel, StateModel):
+    "Content Model with State"
+    
+    class Meta:
+        abstract = True
 
 class DefaultImageManager(StateManager):
 

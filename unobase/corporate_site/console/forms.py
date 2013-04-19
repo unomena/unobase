@@ -6,7 +6,7 @@ Created on 10 Jan 2013
 from django import forms
 from django.db.models import Q
 
-from unobase.forms import Content, State
+from unobase.forms import Content
 from unobase.calendar.forms import EventForm
 
 from unobase.corporate_site import models
@@ -35,16 +35,16 @@ class ExistingImageMixin(object):
         return obj
     
 
-class Event(ExistingImageMixin, EventForm, State):
+class Event(Content, ExistingImageMixin):
     image_choice = forms.ChoiceField(choices=(('new', 'new'), ('existing', 'existing')))
     existing_image = fields.ImageModelChoiceField(required=False,
         queryset=models.Event.objects.filter(~Q(image=None)).only('image', 'image_name').distinct())
     
-    class Meta(EventForm.Meta):
+    class Meta(Content.Meta):
         model = models.Event
-        fields = EventForm.Meta.fields + ['image_name', 'state']
+        fields = Content.Meta.fields + ['venue', 'start', 'end', 'repeat', 'repeat_until', 'external_link', 'image_name', 'state']
         
-class MediaCoverage(ExistingImageMixin, Content, State):
+class MediaCoverage(Content, ExistingImageMixin):
     image_choice = forms.ChoiceField(choices=(('new', 'new'), ('existing', 'existing')))
     existing_image = fields.ImageModelChoiceField(required=False,
         queryset=models.MediaCoverage.objects.filter(~Q(image=None)).only('image', 'image_name').distinct())
@@ -54,7 +54,7 @@ class MediaCoverage(ExistingImageMixin, Content, State):
         fields = Content.Meta.fields + ['image_name', 'state', 'publish_date_time', 'external_link', 'pdf']
 
 
-class News(ExistingImageMixin, Content, State):
+class News(ExistingImageMixin, Content):
     image_choice = forms.ChoiceField(choices=(('new', 'new'), ('existing', 'existing')))
     existing_image = fields.ImageModelChoiceField(required=False,
         queryset=models.News.objects.filter(~Q(image=None)).only('image', 'image_name').distinct())
@@ -63,7 +63,7 @@ class News(ExistingImageMixin, Content, State):
         model = models.News
         fields = Content.Meta.fields + ['image_name', 'state', 'publish_date_time']
         
-class Award(ExistingImageMixin, Content, State):
+class Award(ExistingImageMixin, Content):
     image_choice = forms.ChoiceField(choices=(('new', 'new'), ('existing', 'existing')))
     existing_image = fields.ImageModelChoiceField(required=False,
         queryset=models.Award.objects.filter(~Q(image=None)).only('image', 'image_name').distinct())
@@ -72,25 +72,25 @@ class Award(ExistingImageMixin, Content, State):
         model = models.Award
         fields = Content.Meta.fields + ['image_name', 'state', 'publish_date_time']
         
-class PressRelease(Content, State):
+class PressRelease(Content):
     
     class Meta(Content.Meta):
         model = models.PressRelease
         fields = Content.Meta.fields + ['state', 'publish_date_time']
         
-class Vacancy(Content, State):
+class Vacancy(Content):
     
     class Meta(Content.Meta):
         model = models.Vacancy
         fields = Content.Meta.fields + ['state']
         
-class Product(Content, State):
+class Product(Content):
     
     class Meta(Content.Meta):
         model = models.Product
-        fields = Content.Meta.fields + ['state', 'file']
+        fields = Content.Meta.fields + ['image_name', 'state', 'file']
         
-class CompanyMember(Content, State):
+class CompanyMember(Content):
     
     class Meta(Content.Meta):
         model = models.CompanyMember
