@@ -44,7 +44,7 @@ class StateModel(models.Model):
     class Meta():
         ordering = ['-publish_date_time']
         abstract = True
-        
+                
     def save(self, *args, **kwargs):
         if not self.publish_date_time and self.state == constants.STATE_PUBLISHED:
             self.publish_date_time = timezone.now()
@@ -76,6 +76,10 @@ class BaseModel(models.Model):
     
     def as_leaf_class(self):
         return self.leaf_content_type.model_class().objects.get(id=self.id)
+    
+    @property
+    def leaf_class(self):
+        return self.leaf_content_type.model_class()
 
     def save(self, *args, **kwargs):
         self.leaf_content_type = ContentType.objects.get_for_model(self.__class__) if not self.leaf_content_type else self.leaf_content_type
@@ -137,6 +141,9 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     slug = models.SlugField(max_length=255, editable=False, db_index=True, unique=True)
     content = RichTextField(blank=True, null=True)
     
+    class Meta:
+        abstract = True
+    
     def __unicode__(self):
         if hasattr(self,'title'):
             return smart_unicode(self.title)
@@ -183,7 +190,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
 
         return super(ContentModel, self).save(*args, **kwargs)
     
-class StatefulContentModel(ContentModel, StateModel):
+class StatefulContentModel(StateModel, ContentModel):
     "Content Model with State"
     
     class Meta:

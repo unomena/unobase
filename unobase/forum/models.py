@@ -5,16 +5,16 @@ from django.core.urlresolvers import reverse
 
 from unobase import models as unobase_models
 
-class Forum(unobase_models.ContentModel):
+class Forum(unobase_models.StatefulContentModel):
     pass
 
-class ForumCategory(unobase_models.ContentModel, unobase_models.StateModel):
+class ForumCategory(unobase_models.StatefulContentModel):
     forum = models.ForeignKey(Forum, related_name='categories')
 
     class Meta():
         permissions = (('can_moderate', 'Can moderate forum category'),)
 
-class ForumThread(unobase_models.ContentModel, unobase_models.StateModel):
+class ForumThread(unobase_models.StatefulContentModel):
     category = models.ForeignKey(ForumCategory, related_name='threads')
     edited = models.BooleanField(default=False)
 
@@ -28,7 +28,7 @@ class ForumThread(unobase_models.ContentModel, unobase_models.StateModel):
                                                     self.category.slug, 
                                                     self.slug))
 
-class ForumPost(unobase_models.ContentModel, unobase_models.StateModel):
+class ForumPost(unobase_models.StatefulContentModel):
     thread = models.ForeignKey(ForumThread)
     edited = models.BooleanField(default=False)
 

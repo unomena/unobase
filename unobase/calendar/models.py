@@ -27,12 +27,12 @@ class Venue(models.Model):
 
 class Event(ContentModel):
     
-    parent_ptr = models.OneToOneField(
-        ContentModel,
-        primary_key=True,
-        parent_link=True,
-        related_name='+'
-    )
+#    parent_ptr = models.OneToOneField(
+#        ContentModel,
+#        primary_key=True,
+#        parent_link=True,
+#        related_name='+'
+#    )
     
     venue = models.ForeignKey(Venue, blank=True, null=True,
                               help_text='Venue where the event will take place.',
