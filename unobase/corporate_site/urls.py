@@ -10,6 +10,12 @@ urlpatterns = patterns('django.contrib.flatpages.views',
                         
     url(r'^contact/$', 'flatpage', {'url': '/contact/'}, 
         name='corporate_site_contact'),
+                       
+    url(r'^privacy/$', 'flatpage', {'url': '/privacy/'}, 
+        name='corporate_site_privacy'),
+                        
+    url(r'^legal/$', 'flatpage', {'url': '/legal/'}, 
+        name='corporate_site_legal'),
 )
 
 urlpatterns += patterns('',
