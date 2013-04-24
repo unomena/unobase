@@ -75,6 +75,26 @@ class SuperuserRequiredMixin(object):
 
         return super(SuperuserRequiredMixin, self).dispatch(request,
             *args, **kwargs)
+        
+class AdminRequiredMixin(object):
+    """
+    Mixin allows you to require a user with `is_superuser` set to True.
+    """
+    login_url = settings.LOGIN_URL  # LOGIN_URL from project settings
+    raise_exception = False  # Default whether to raise an exception to none
+    redirect_field_name = REDIRECT_FIELD_NAME  # Set by django.contrib.auth
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_admin:  # If the user is a standard user,
+            if self.raise_exception:  # *and* if an exception was desired
+                raise PermissionDenied  # return a forbidden response.
+            else:
+                return redirect_to_login(request.get_full_path(),
+                    self.login_url,
+                    self.redirect_field_name)
+
+        return super(AdminRequiredMixin, self).dispatch(request,
+            *args, **kwargs)
 
 class PermissionRequiredMixin(object):
     """

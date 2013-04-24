@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<div data-last-content="{% trans content.content|safe %}" class="content-block {% if user.is_admin %}admin-content-block{% endif %}">
+	<div class="inner-alert-block hidden">You have changed the content of this block without saving. Please click the save button to save changes.</div>
+	<div class="inner-content-block {% if user.is_admin %}inner-admin-content-block{% endif %}" {% if user.is_admin %}contenteditable="true"{% endif %}>
+		{% trans content.content|safe %}
+	</div>
+	
+	{% if user.is_admin %}
+		<a data-slug="{{ content.slug }}" class="hidden btn" href="javascript:void(0);">Save</a>
+	{% endif %}
+</div>

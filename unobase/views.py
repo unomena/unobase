@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
-import models
+from unobase import models, utils, mixins
 
 class ListWithDetailView(generic_views.ListView):
 
@@ -19,4 +19,16 @@ class ListWithDetailView(generic_views.ListView):
             object_list=self.object_list,
             request=self.request)
         return self.render_to_response(context)
+    
+class ContentBlockUpdate(mixins.AdminRequiredMixin, generic_views.View):
+    
+    def post(self, request, *args, **kwargs):
+        slug = request.POST.get('slug')
+        content = request.POST.get('content')
+        
+        content_block = get_object_or_404(models.ContentBlock, slug=slug)
+        content_block.content = content
+        content_block.save()
+        
+        return utils.respond_with_json({'status': 'success'})
 

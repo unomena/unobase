@@ -1,0 +1,45 @@
+{% if user.is_admin %}
+<script>
+/* Content Blocks */
+	String.prototype.trim = function() {
+	    return this.replace(/^\s+|\s+$/g, "");
+	};
+
+	$('.inner-admin-content-block').keyup(function() {
+		  $(this).next('a').fadeIn();
+		  
+		  if($(this).html().trim() !== $(this).parent().attr('data-last-content').trim()){
+			  $(this).prev('.inner-alert-block').fadeIn();
+		  }else{
+			  $(this).prev('.inner-alert-block').fadeOut();
+		  }
+	});
+	
+	$('.admin-content-block a').click(function(){
+		var self = this,
+			content = $(this).prev('.inner-content-block').html(),
+			slug = $(this).attr('data-slug');
+		
+		$(self).html('Saving...');
+		
+		$.post('/content-block-update/', 
+			{   content: content, 
+				slug: slug, 
+				csrfmiddlewaretoken: $.cookie('csrftoken')
+			}, 
+			function(data){
+				data = JSON.parse(data);
+				
+				if(data.status == 'success'){
+					$(self).html('Save').hide();
+					$(self).parent().attr('data-last-content', content);
+					$(self).siblings('.inner-alert-block').hide();
+				}
+				else{
+					$(self).html('Error');
+				}
+			}
+		);
+	});
+</script>
+{% endif %}

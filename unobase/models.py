@@ -195,6 +195,9 @@ class StatefulContentModel(StateModel, ContentModel):
     
     class Meta:
         abstract = True
+        
+class ContentBlock(StatefulContentModel):
+    pass
 
 class DefaultImageManager(StateManager):
 
