@@ -12,8 +12,11 @@ register = template.Library()
 
 @register.inclusion_tag('unobase/inclusion_tags/content_block.html', takes_context=True)
 def content_block(context, slug):
+    try:
+        content = models.ContentBlock.permitted.get(slug=slug)
+    except  models.ContentBlock.DoesNotExist:
+        content = None
     
-    return {'content': get_object_or_404(models.ContentBlock, 
-                                         state=constants.STATE_PUBLISHED, 
-                                         slug=slug),
-            'user': context['request'].user}
+    return {'content': content,
+            'user': context['request'].user,
+            'slug': slug}

@@ -9,6 +9,7 @@ from django.utils.encoding import smart_unicode
 from django.utils import timezone
 from django.conf import settings
 from django.template.defaultfilters import slugify
+from django.contrib.sites.models import Site
 
 from photologue.models import ImageModel
 from ckeditor.fields import RichTextField
@@ -140,6 +141,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     description = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=255, editable=False, db_index=True, unique=True)
     content = RichTextField(blank=True, null=True)
+    site = models.ForeignKey(Site, blank=True, null=True)
     
     class Meta:
         abstract = True
