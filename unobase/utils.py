@@ -94,3 +94,17 @@ def get_object_comment_list_for_user(user, comments_qs, obj):
     
 def get_token_for_user(user):
     return hashlib.md5(user.email + settings.SECRET_KEY).hexdigest()
+
+def get_permitted_object_or_404(klass, *args, **kwargs):
+    queryset = klass.permitted
+    try:
+        return queryset.get(*args, **kwargs)
+    except queryset.model.DoesNotExist:
+        raise http.Http404('No %s matches the given query.' % queryset.model._meta.object_name)
+    
+def get_permitted_object_for_current_site_or_404(klass, *args, **kwargs):
+    queryset = klass.permitted
+    try:
+        return queryset.for_current_site().get(*args, **kwargs)
+    except queryset.model.DoesNotExist:
+        raise http.Http404('No %s matches the given query.' % queryset.model._meta.object_name)

@@ -19,12 +19,18 @@ from unobase import settings as unobase_settings
 
 RE_NUMERICAL_SUFFIX = re.compile(r'^[\w-]*-(\d+)+$')
 
-class StateManager(models.Manager):
+class SiteObjectsManager(models.Manager):
+
+    def for_current_site(self):
+        return self.filter(site=Site.objects.get_current())
+
+class StateManager(SiteObjectsManager):
 
     def get_query_set(self):
         queryset = super(StateManager,
             self).get_query_set().filter(state__in=[constants.STATE_PUBLISHED,
                                                     constants.STATE_STAGED])
+            
         # exclude objects in staging state if not in staging mode (settings.STAGING = False)
         if not getattr(settings, 'STAGING', False):
             queryset = queryset.exclude(state=constants.STATE_STAGED)
@@ -142,6 +148,8 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     slug = models.SlugField(max_length=255, editable=False, db_index=True, unique=True)
     content = RichTextField(blank=True, null=True)
     site = models.ForeignKey(Site, blank=True, null=True)
+    
+    objects = SiteObjectsManager()
     
     class Meta:
         abstract = True
