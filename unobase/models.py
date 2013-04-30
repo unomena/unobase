@@ -201,6 +201,37 @@ class StatefulContentModel(StateModel, ContentModel):
 class ContentBlock(StatefulContentModel):
     pass
 
+class Banner(StateModel, BaseModel):
+    title = models.CharField(max_length=255)
+    
+    class Meta:
+        abstract = True
+        
+    def __unicode__(self):
+        return u'%s' % self.title
+
+class ImageBanner(Banner, ImageModel):
+    pass
+
+class HTMLBanner(Banner):
+    content = RichTextField(blank=True, null=True)
+    site = models.ForeignKey(Site, blank=True, null=True)
+    
+class BannerSet(models.Model):
+    slug = models.SlugField()
+    
+    class Meta:
+        abstract = True
+        
+    def __unicode__(self):
+        return u'%s' % self.slug
+    
+class ImageBannerSet(BannerSet):
+    banners = models.ManyToManyField(ImageBanner, related_name='banner_sets')
+    
+class HTMLBannerSet(BannerSet):
+    banners = models.ManyToManyField(HTMLBanner, related_name='banner_sets')
+
 class DefaultImageManager(StateManager):
 
     def get_random(self, category=None):

@@ -12,5 +12,5 @@
 		{% endif %}
 	</div>
 {% else %}
-	<p>Please load the content block with slug &#39;{{ slug }}&#39; in the database.</p>
+	{% if user.is_admin %}<p>Please load the content block with slug &#39;{{ slug }}&#39; in the database.</p>{% endif %}
 {% endif %}

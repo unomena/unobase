@@ -1,0 +1,9 @@
+{% if bannerset %}
+<ul id="slider">
+	{% for banner in bannerset.banners.all %}
+		<li><img src="{{ banner.get_100x100_url }}"></li>
+	{% endfor %}
+</ul>
+{% else %}
+	<p style="color: red;">Please load an Image BannerSet with slug &#39;{{ slug }}&#39; in the database</p>
+{% endif %}
