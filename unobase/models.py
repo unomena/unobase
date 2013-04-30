@@ -22,7 +22,7 @@ RE_NUMERICAL_SUFFIX = re.compile(r'^[\w-]*-(\d+)+$')
 class SiteObjectsManager(models.Manager):
 
     def for_current_site(self):
-        return self.filter(site=Site.objects.get_current())
+        return self.filter(sites__id__exact=Site.objects.get_current().id)
 
 class StateManager(SiteObjectsManager):
 
@@ -147,7 +147,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     description = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=255, editable=False, db_index=True, unique=True)
     content = RichTextField(blank=True, null=True)
-    site = models.ForeignKey(Site, blank=True, null=True)
+    sites = models.ManyToManyField(Site, blank=True, null=True)
     
     objects = SiteObjectsManager()
     
