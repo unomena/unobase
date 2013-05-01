@@ -43,12 +43,6 @@ class StateModel(models.Model):
     class Meta():
         ordering = ['-publish_date_time']
         abstract = True
-        
-    def save(self, *args, **kwargs):
-        if not self.publish_date_time and self.state == constants.STATE_PUBLISHED:
-            self.publish_date_time = timezone.now()
-            
-        return super(StateModel, self).save(*args, **kwargs)
 
     @staticmethod
     def set_permitted_manager(sender, **kwargs):
