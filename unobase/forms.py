@@ -37,6 +37,8 @@ class Content(forms.ModelForm):
         super(Content, self).__init__(*args, **kwargs)
 
         self.object = kwargs['instance']
+        
+        self.fields['title'].widget.attrs.update({'class': 'required'})
 
         self.fields['image'].required = False
         self.fields['tags'].widget.attrs.update({'class':'chozen'})
