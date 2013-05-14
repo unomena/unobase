@@ -33,4 +33,17 @@ class CaseDetail(mixins.LoginRequiredMixin, generic_views.DetailView):
 class FAQList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.FrequentlyAskedQuestion.objects.all()
+        return models.FrequentlyAskedQuestion.permitted.all()
+    
+class TechnicalDocumentation(generic_views.TemplateView):
+    
+    def get_context_data(self, **kwargs):
+        context = super(TechnicalDocumentation, self).get_context_data(**kwargs)
+        
+        context.update({'guide_list': models.Guide.permitted.all(),
+                        'reference_list': models.Reference.permitted.all(),
+                        'best_practice_list': models.BestPractice.permitted.all(),
+                        'white_paper_list': models.WhitePaper.permitted.all(),
+                        'product_manual_list': models.ProductManual.permitted.all()})
+        
+        return context

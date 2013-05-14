@@ -29,4 +29,10 @@ urlpatterns = patterns('',
         views.FAQList.as_view(
             template_name='support/faq/faq_list.html'),
         name='support_faq'),
+                       
+    # Technical Documentation
+    
+    url(r'^technical-documentation/$',
+        views.TechnicalDocumentation.as_view(template_name='support/technical_documentation/technical_documentation.html'),
+        name='support_technical_documentation'),
 )
