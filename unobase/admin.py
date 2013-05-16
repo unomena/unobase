@@ -52,7 +52,7 @@ admin.site.register(models.ContentBlock)
 
 
 class SiteListAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'site_list')
+    list_display = ('title', 'site_list')
     
     def site_list(self, model):
         return ', '.join([site.domain for site in model.sites.all()])
