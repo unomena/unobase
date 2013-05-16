@@ -211,6 +211,7 @@ class ContentBlock(StatefulContentModel):
 
 class Banner(StateModel, BaseModel):
     title = models.CharField(max_length=255)
+    site = models.ForeignKey(Site, blank=True, null=True)
     
     class Meta:
         abstract = True
@@ -223,7 +224,6 @@ class ImageBanner(Banner, ImageModel):
 
 class HTMLBanner(Banner):
     content = RichTextField(blank=True, null=True)
-    site = models.ForeignKey(Site, blank=True, null=True)
     
 class BannerSet(models.Model):
     slug = models.SlugField()

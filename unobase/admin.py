@@ -50,7 +50,15 @@ admin.site.register(models.DefaultImage, DefaultImageAdmin)
 admin.site.register(models.TagModel)
 admin.site.register(models.ContentBlock)
 
-admin.site.register(models.ImageBanner)
-admin.site.register(models.HTMLBanner)
+
+class SiteListAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'site_list')
+    
+    def site_list(self, model):
+        return ', '.join([site.domain for site in model.sites.all()])
+
+admin.site.register(models.ImageBanner, SiteListAdmin)
+admin.site.register(models.HTMLBanner, SiteListAdmin)
+
 admin.site.register(models.ImageBannerSet)
 admin.site.register(models.HTMLBannerSet)
