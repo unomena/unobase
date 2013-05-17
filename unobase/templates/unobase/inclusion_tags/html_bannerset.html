@@ -1,6 +1,6 @@
 {% if bannerset %}
 <ul id="slider">
-	{% for banner in bannerset.banners.all %}
+	{% for banner in bannerset.site_banners %}
 		<li>{{ banner.content|safe }}</li>
 	{% endfor %}
 </ul>

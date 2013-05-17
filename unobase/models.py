@@ -234,6 +234,10 @@ class BannerSet(models.Model):
     def __unicode__(self):
         return u'%s' % self.slug
     
+    @property
+    def site_banners(self):
+        return self.banners.filter(sites__id__exact=Site.objects.get_current().id)
+    
 class ImageBannerSet(BannerSet):
     banners = models.ManyToManyField(ImageBanner, related_name='banner_sets')
     
