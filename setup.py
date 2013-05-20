@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unobase',
-    version='1.1.5.beta',
+    version='1.1.6.beta',
     description='Unomena Base Django Application',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read(),
     author='Unomena',
@@ -14,7 +14,8 @@ setup(
     ],
     tests_require=[
         'django-setuptest>=0.1.2',
-        'pysqlite>=2.5'
+        'pysqlite>=2.5',
+	'pycurl'
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     include_package_data=True,
