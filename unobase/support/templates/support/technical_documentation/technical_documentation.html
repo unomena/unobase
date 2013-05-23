@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Technical Documentation{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h1>Technical Documentation</h1>
+            <div class="content">
+                <div class="column">
+                    {% for object in guide_list %}
+                     	<img src="{{ object.get_20x20_url }}"><a href="{{ object.file.url }}">{{ object.title }}</a>
+                    {% empty %}
+                        <p>There are no guides to list.</p>
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    {% for object in reference_list %}
+                     	<img src="{{ object.get_20x20_url }}"><a href="{{ object.file.url }}">{{ object.title }}</a>
+                    {% empty %}
+                        <p>There are no references to list.</p>
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    {% for object in best_practice_list %}
+                     	<img src="{{ object.get_20x20_url }}"><a href="{{ object.file.url }}">{{ object.title }}</a>
+                    {% empty %}
+                        <p>There are no best practices to list.</p>
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    {% for object in white_paper_list %}
+                     	<img src="{{ object.get_20x20_url }}"><a href="{{ object.file.url }}">{{ object.title }}</a>
+                    {% empty %}
+                        <p>There are no white papers to list.</p>
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    {% for object in product_manual_list %}
+                     	<img src="{{ object.get_20x20_url }}"><a href="{{ object.file.url }}">{{ object.title }}</a>
+                    {% empty %}
+                        <p>There are no product manuals to list.</p>
+                    {% endfor %}
+                </div>
+                <div class="clear"></div>
+            </div><!--/content-->
+        </div>
+    </div>
+{% endblock %}
