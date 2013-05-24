@@ -1,6 +1,7 @@
 from django.views import generic as generic_views
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from django.http import Http404
 
 from unobase import constants as unobase_constants
 from unobase import views as unobase_views
@@ -17,6 +18,15 @@ class BlogDetail(unobase_views.ListWithDetailView):
             return models.BlogEntry.objects.filter(tags__title__iexact=self.request.GET['filter_by_tag'].strip())
 
         return models.BlogEntry.objects.filter(blog=self.object)
+
+class SingleBlogDetail(BlogDetail):
+
+    def get_object(self):
+        blogs = models.Blog.objects.filter(state=unobase_constants.STATE_PUBLISHED)
+        if blogs:
+            return blogs[0]
+        
+        raise Http404('No blogs available')
 
 class BlogList(generic_views.ListView):
 
