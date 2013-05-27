@@ -326,13 +326,13 @@ class RoleCheckMixin(object):
                                        "'role_required' attribute to be set.")
 
         if self.role_only:
-            role_meets_requirements = request.user.is_superuser or \
-                                      request.user.profile.role >= settings.ADMIN_ROLE or \
-                                      request.user.profile.role == self.role_required
+            role_meets_requirements = request.user.is_staff or \
+                                      request.user.role >= settings.ADMIN_ROLE or \
+                                      request.user.role == self.role_required
         else:
-            role_meets_requirements = request.user.is_superuser or \
-                                      request.user.profile.role >= settings.ADMIN_ROLE or \
-                                      request.user.profile.role >= self.role_required
+            role_meets_requirements = request.user.is_staff or \
+                                      request.user.role >= settings.ADMIN_ROLE or \
+                                      request.user.role >= self.role_required
 
         if not role_meets_requirements:  # If the user doesn't have role,
             if self.raise_exception:  # *and* if an exception was desired
