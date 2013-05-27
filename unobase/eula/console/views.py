@@ -46,13 +46,6 @@ class EULAVersionFormSetMixin(object):
 
 class EULACreate(AdminMixin, EULAVersionFormSetMixin, generic_views.CreateView):
     
-    def get(self, request, *args, **kwargs):
-        try:
-            eula_models.EULA.objects.get()
-            return HttpResponse('A EULA already exists')
-        except eula_models.EULA.DoesNotExist:
-            return super(EULACreate, self).get(request, *args, **kwargs)
-    
     def get_success_url(self):
         return reverse('console_eula_detail', args=(self.object.pk,))
 
