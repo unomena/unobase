@@ -23,8 +23,8 @@ class EULAVersionForm(forms.ModelForm):
         super(EULAVersionForm, self).__init__(*args, **kwargs)
         
         if self.instance.pk:
-            self.fields['version'].attrs.update({'readonly': 'readonly'})
-            self.fields['content'].attrs.update({'readonly': 'readonly'})
+            self.fields['version'].widget.attrs.update({'readonly': 'readonly'})
+            self.fields['content'].widget.attrs.update({'readonly': 'readonly'})
         
     
 EULAVersionFormSet = inlineformset_factory(
