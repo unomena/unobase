@@ -12,6 +12,9 @@ from unobase.corporate_site import constants
 class Article(unobase_models.StatefulContentModel, unobase_models.RelatedModel):
     "An article"
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    
+    class Meta:
+        ordering = ['-created']
 
 class News(Article):
     "News about the company"
