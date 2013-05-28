@@ -76,5 +76,7 @@ class CompanyMember(unobase_models.StatefulContentModel):
     job_title = models.CharField(max_length=255, blank=True, null=True)
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
     
+    order = models.PositiveIntegerField(default=0)
+    
     class Meta:
-        ordering = ['-created']
+        ordering = ['order']
