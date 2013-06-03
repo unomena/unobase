@@ -12,6 +12,9 @@ register = template.Library()
 def poll():
     poll = preferences.SitePreferences.active_poll
     
+    if not poll:
+        return {}
+    
     return {
         'form': forms.PollAnswerForm(initial={'poll': poll}),
         'results': utils.get_poll_percentages(poll.answers.all())
