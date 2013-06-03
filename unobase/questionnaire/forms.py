@@ -41,7 +41,8 @@ class Questionnaire(forms.Form):
         self.base_fields.update({'question_%d' % question.id : forms.CharField(label=question.question)})
     
     def __init_freetext_blob__(self, question):
-        self.base_fields.update({'question_%d' % question.id : forms.TextField(label=question.question)})
+        self.base_fields.update({'question_%d' % question.id : forms.CharField(label=question.question,
+                                                                               widget=forms.Textarea)})
     
     def __init_file__(self, question):
         self.base_fields.update({'question_%d' % question.id : forms.FileField(label=question.question,
