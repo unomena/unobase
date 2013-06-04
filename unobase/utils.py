@@ -108,3 +108,11 @@ def get_permitted_object_for_current_site_or_404(klass, *args, **kwargs):
         return queryset.for_current_site().get(*args, **kwargs)
     except queryset.model.DoesNotExist:
         raise http.Http404('No %s matches the given query.' % queryset.model._meta.object_name)
+    
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
