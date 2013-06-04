@@ -15,6 +15,7 @@ from django.utils.decorators import method_decorator
 from django.utils.http import urlquote
 from django.views.generic import CreateView
 from django.utils.decorators import available_attrs
+from django.contrib.auth.models import Group
 
 from functools import wraps
 
@@ -343,6 +344,40 @@ class RoleCheckMixin(object):
                     self.redirect_field_name)
 
         return super(RoleCheckMixin, self).dispatch(request,
+            *args, **kwargs)
+        
+class GroupCheckMixin(object):
+    """
+    Mixin allows you to require a user with `is_superuser` set to True.
+    """
+    login_url = settings.LOGIN_URL  # LOGIN_URL from project settings
+    raise_exception = False  # Default whether to raise an exception to none
+    redirect_field_name = REDIRECT_FIELD_NAME  # Set by django.contrib.auth
+    groups_required = None
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if self.groups_required == None:
+            raise ImproperlyConfigured("'GroupCheckMixin' requires "
+                                       "'group_required' attribute to be set.")
+        
+        
+        
+        try:
+            if request.user.is_staff or request.user.groups.get(name__in=self.groups_required):
+                group_meets_requirements = True
+        except Group.DoesNotExist:
+            group_meets_requirements = False
+
+        if not group_meets_requirements:  # If the user doesn't have role,
+            if self.raise_exception:  # *and* if an exception was desired
+                raise PermissionDenied  # return a forbidden response.
+            else:
+                return redirect_to_login(request.get_full_path(),
+                    self.login_url,
+                    self.redirect_field_name)
+
+        return super(GroupCheckMixin, self).dispatch(request,
             *args, **kwargs)
 
 class FilterMixin(object):
