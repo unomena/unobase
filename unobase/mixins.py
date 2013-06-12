@@ -46,7 +46,15 @@ class ConsoleUserRequiredMixin(object):
     redirect_field_name = REDIRECT_FIELD_NAME  # Set by django.contrib.auth
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_console_user and not request.user.is_admin and not request.user.is_admin:  # If the user is a standard user,
+        try:
+            if not request.user.is_console_user and not request.user.is_admin and not request.user.is_admin:  # If the user is a standard user,
+                if self.raise_exception:  # *and* if an exception was desired
+                    raise PermissionDenied  # return a forbidden response.
+                else:
+                    return redirect_to_login(request.get_full_path(),
+                        self.login_url,
+                        self.redirect_field_name)
+        except AttributeError:
             if self.raise_exception:  # *and* if an exception was desired
                 raise PermissionDenied  # return a forbidden response.
             else:
