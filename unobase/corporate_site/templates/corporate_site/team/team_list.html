@@ -16,7 +16,7 @@
                             {% endif %}
                             <h3>{{ object.title }}</h3>
                             <p>{{ object.content|safe|truncatechars:230 }}</p>
-                            <p><a href="{% url 'corporate_site_team_detail' object.pk %}" class="link">Read More</a></p>
+                            <p><a href="{% url 'corporate_site_team_detail' object.slug %}" class="link">Read More</a></p>
                         </div>
                     {% empty %}
                         <p>There are no team members to display.</p>

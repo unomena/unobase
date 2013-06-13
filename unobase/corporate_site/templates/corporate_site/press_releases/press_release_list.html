@@ -13,7 +13,7 @@
                         <div class="listing">
                             <h3>{{ object.title }}</h3>
                             <p>{{ object.content|safe|truncatechars:200 }}</p>
-                            <p>{% if object.pdf %}<a href="{{ MEDIA_URL }}{{ object.pdf }}" class="link">Download PDF</a> &nbsp; {% endif %}<a href="{% url 'corporate_site_press_release_detail' object.pk %}" class="link">Read More</a></p>
+                            <p>{% if object.pdf %}<a href="{{ MEDIA_URL }}{{ object.pdf }}" class="link">Download PDF</a> &nbsp; {% endif %}<a href="{% url 'corporate_site_press_release_detail' object.publish_date_time|date:'Ymj' object.pk %}" class="link">Read More</a></p>
                         </div>
                     {% empty %}
                         <p>There are no press releases to display.</p>
