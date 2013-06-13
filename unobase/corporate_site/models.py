@@ -52,6 +52,9 @@ class Event(calendar_models.Event, unobase_models.RelatedModel, unobase_models.S
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_EVENT
     
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    
+    class Meta:
+        ordering = ['-start']
 
 class Vacancy(unobase_models.ContentModel, unobase_models.StateModel):
     "Job vacancies within the company"

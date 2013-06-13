@@ -26,7 +26,7 @@ urlpatterns += patterns('',
                                paginate_by=20),
         name='corporate_site_news_list'),
                        
-    url(r'^news/detail/(?P<pk>\d+)/$',
+    url(r'^news/detail/(?P<date>\w+)-(?P<slug>[-\w]+)/$',
         views.NewsDetail.as_view(template_name='corporate_site/news/news_detail.html'),
         name='corporate_site_news_detail'),
                        
@@ -37,7 +37,7 @@ urlpatterns += patterns('',
                                 paginate_by=20),
         name='corporate_site_awards_list'),
                        
-    url(r'^awards/detail/(?P<pk>\d+)/$',
+    url(r'^awards/detail/(?P<slug>[-\w]+)/$',
         views.AwardDetail.as_view(template_name='corporate_site/awards/award_detail.html'),
         name='corporate_site_awards_detail'),
                        
@@ -62,8 +62,10 @@ urlpatterns += patterns('',
                                        paginate_by=20),
         name='corporate_site_press_release_list'),
                        
-    url(r'^press_releases/detail/(?P<pk>\d+)/$',
-        views.PressReleaseDetail.as_view(template_name='corporate_site/press_releases/press_release_detail.html'),
+    url(r'^press_releases/detail/(?P<date>\w+)-(?P<slug>[-\w]+)/$',
+        views.PressReleaseDetail.as_view(
+            template_name='corporate_site/press_releases/press_release_detail.html'
+        ),
         name='corporate_site_press_release_detail'),
                        
     # Vacancy
@@ -80,7 +82,7 @@ urlpatterns += patterns('',
                                      paginate_by=20),
         name='corporate_site_leadership_list'),
                        
-    url(r'^leadership/detail/(?P<pk>\d+)/$',
+    url(r'^leadership/detail/(?P<slug>[-\w]+)/$',
         views.LeadershipDetail.as_view(template_name='corporate_site/leadership/leadership_detail.html'),
         name='corporate_site_leadership_detail'),
                        
@@ -91,7 +93,7 @@ urlpatterns += patterns('',
                                paginate_by=20),
         name='corporate_site_team_list'),
                        
-    url(r'^team/detail/(?P<pk>\d+)/$',
+    url(r'^team/detail/(?P<slug>[-\w]+)/$',
         views.TeamDetail.as_view(template_name='corporate_site/team/team_detail.html'),
         name='corporate_site_team_detail'),
                        
@@ -102,7 +104,7 @@ urlpatterns += patterns('',
                                 paginate_by=20),
         name='corporate_site_board_member_list'),
                        
-    url(r'^board_members/detail/(?P<pk>\d+)/$',
+    url(r'^board_members/detail/(?P<slug>[-\w]+)/$',
         views.LeadershipDetail.as_view(template_name='corporate_site/board_members/board_member_detail.html'),
         name='corporate_site_board_member_detail'),
                        
@@ -113,7 +115,7 @@ urlpatterns += patterns('',
                                    paginate_by=20),
         name='corporate_site_investor_list'),
                        
-    url(r'^investors/detail/(?P<pk>\d+)/$',
+    url(r'^investors/detail/(?P<slug>[-\w]+)/$',
         views.InvestorDetail.as_view(template_name='corporate_site/investors/investor_detail.html'),
         name='corporate_site_investor_detail'),
 )

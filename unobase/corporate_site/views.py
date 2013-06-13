@@ -18,7 +18,7 @@ class NewsList(generic_views.ListView):
 class NewsDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.News, pk=self.kwargs['pk'])
+        return get_object_or_404(models.News, slug=self.kwargs['slug'])
     
 # Awards
     
@@ -30,7 +30,7 @@ class AwardList(generic_views.ListView):
 class AwardDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.Award, pk=self.kwargs['pk'])
+        return get_object_or_404(models.Award, slug=self.kwargs['slug'])
     
 # Events
     
@@ -56,7 +56,7 @@ class PressReleaseList(generic_views.ListView):
 class PressReleaseDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.PressRelease, pk=self.kwargs['pk'])
+        return get_object_or_404(models.PressRelease, slug=self.kwargs['slug'])
     
 # Vacancies
     
@@ -75,7 +75,7 @@ class LeadershipList(generic_views.ListView):
 class LeadershipDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.CompanyMember, pk=self.kwargs['pk'], is_leader=True)
+        return get_object_or_404(models.CompanyMember, slug=self.kwargs['slug'], is_leader=True)
     
 # Team
     
@@ -87,7 +87,7 @@ class TeamList(generic_views.ListView):
 class TeamDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.CompanyMember, pk=self.kwargs['pk'])
+        return get_object_or_404(models.CompanyMember, slug=self.kwargs['slug'])
     
 # Board members
     
@@ -99,7 +99,7 @@ class BoardList(generic_views.ListView):
 class BoardDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.CompanyMember, pk=self.kwargs['pk'], is_board_member=True)
+        return get_object_or_404(models.CompanyMember, slug=self.kwargs['slug'], is_board_member=True)
     
 # Investors
     
@@ -111,4 +111,4 @@ class InvestorList(generic_views.ListView):
 class InvestorDetail(generic_views.DetailView):
 
     def get_object(self):
-        return get_object_or_404(models.CompanyMember, pk=self.kwargs['pk'], is_investor=True)
+        return get_object_or_404(models.CompanyMember, slug=self.kwargs['slug'], is_investor=True)
