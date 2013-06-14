@@ -25,7 +25,7 @@ class Content(forms.ModelForm):
     class Meta:
         model = models.ContentModel
 
-        fields = ['image', 'title','content', 'modified_by', 'created_by', 'tags']
+        fields = ['image', 'title', 'content', 'description', 'modified_by', 'created_by', 'tags']
 
         widgets = {'image' : forms.FileInput,
                    'modified_by' : forms.HiddenInput,
