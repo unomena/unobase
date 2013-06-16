@@ -37,7 +37,7 @@ class AwardDetail(generic_views.DetailView):
 class EventList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.Event.permitted.all()
+        return models.Event.permitted.all().order_by('start')
     
 # Media Coverage
     
