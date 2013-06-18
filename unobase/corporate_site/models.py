@@ -45,7 +45,7 @@ class MediaCoverage(Article):
     external_link = models.URLField(blank=True, null=True)
     
     class Meta:
-        ordering = ['-created']
+        ordering = ['-publish_date_time']
 
 class Event(calendar_models.Event, unobase_models.RelatedModel, unobase_models.StateModel):
     "Trade Show, Festival, Market"
