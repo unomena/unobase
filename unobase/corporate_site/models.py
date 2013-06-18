@@ -18,7 +18,7 @@ class News(Article):
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_NEWS
     
     class Meta:
-        ordering = ['-created']
+        ordering = ['-publish_date_time']
 
 class Award(Article):
     "Company's awards"
@@ -35,7 +35,7 @@ class PressRelease(Article):
     pdf = models.FileField(upload_to='press_releases', blank=True, null=True)
     
     class Meta:
-        ordering = ['-created']
+        ordering = ['-publish_date_time']
 
 class MediaCoverage(Article):
     "Media coverage about the company"
