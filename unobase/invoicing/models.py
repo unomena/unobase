@@ -53,12 +53,12 @@ class Invoice(ImageModel):
     
     @property
     def sub_total_amount(self):
-        total_amount = 0
+        sub_total_amount = 0
         
         for record in self.records.all():
-            total_amount += record.total_amount
+            sub_total_amount += record.total_amount
             
-        return total_amount
+        return sub_total_amount - (sub_total_amount * Decimal(0.14))
     
     @property
     def total_amount(self):
