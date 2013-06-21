@@ -15,12 +15,13 @@ from unobase import utils as unobase_utils
 
 from unobase.corporate_site import models as corporate_site_models
 
-class AdminMixin(unobase_mixins.ConsoleUserRequiredMixin):
+class AdminMixin(unobase_mixins.ConsoleUserRequiredMixin, unobase_mixins.PermissionRequiredMixin):
     raise_exception = False
     
 # Events
 
 class EventCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_event'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -29,6 +30,7 @@ class EventCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_event_detail', args=(self.object.pk,))
 
 class EventUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_event'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -40,12 +42,14 @@ class EventUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_event_detail', args=(self.object.pk,))
 
 class EventDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_event'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.Event,
             pk=self.kwargs['pk'])
 
 class EventDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_event'
 
     def get_queryset(self):
         return corporate_site_models.Event.permitted.all()
@@ -63,6 +67,7 @@ class EventDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_event_list')
 
 class EventList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_event'
 
     def get_queryset(self):
         return corporate_site_models.Event.permitted.all()
@@ -70,6 +75,7 @@ class EventList(AdminMixin, generic_views.ListView):
 # Media Coverage
 
 class MediaCoverageCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_mediacoverage'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -78,6 +84,7 @@ class MediaCoverageCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_media_coverage_detail', args=(self.object.pk,))
 
 class MediaCoverageUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_mediacoverage'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -89,12 +96,14 @@ class MediaCoverageUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_media_coverage_detail', args=(self.object.pk,))
 
 class MediaCoverageDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_mediacoverage'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.MediaCoverage,
             pk=self.kwargs['pk'])
 
 class MediaCoverageDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_mediacoverage'
 
     def get_queryset(self):
         return corporate_site_models.MediaCoverage.permitted.all()
@@ -112,6 +121,7 @@ class MediaCoverageDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_media_coverage_list')
 
 class MediaCoverageList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_mediacoverage'
 
     def get_queryset(self):
         return corporate_site_models.MediaCoverage.permitted.all()
@@ -119,6 +129,7 @@ class MediaCoverageList(AdminMixin, generic_views.ListView):
 # News
 
 class NewsCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_news'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -127,6 +138,7 @@ class NewsCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_news_detail', args=(self.object.pk,))
 
 class NewsUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_news'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -138,12 +150,14 @@ class NewsUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_news_detail', args=(self.object.pk,))
 
 class NewsDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_news'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.News,
             pk=self.kwargs['pk'])
 
 class NewsDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_news'
 
     def get_queryset(self):
         return corporate_site_models.News.permitted.all()
@@ -161,6 +175,7 @@ class NewsDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_news_list')
 
 class NewsList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_news'
 
     def get_queryset(self):
         return corporate_site_models.News.permitted.all()
@@ -168,6 +183,7 @@ class NewsList(AdminMixin, generic_views.ListView):
 # Awards
 
 class AwardCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_award'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -176,6 +192,7 @@ class AwardCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_awards_detail', args=(self.object.pk,))
 
 class AwardUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_award'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -187,12 +204,14 @@ class AwardUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_awards_detail', args=(self.object.pk,))
 
 class AwardDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_award'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.Award,
             pk=self.kwargs['pk'])
 
 class AwardDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_award'
 
     def get_queryset(self):
         return corporate_site_models.Award.permitted.all()
@@ -210,6 +229,7 @@ class AwardDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_awards_list')
 
 class AwardList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_award'
 
     def get_queryset(self):
         return corporate_site_models.Award.permitted.all()
@@ -217,6 +237,7 @@ class AwardList(AdminMixin, generic_views.ListView):
 # Press Releases
 
 class PressReleaseCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_pressrelease'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -225,6 +246,7 @@ class PressReleaseCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_press_releases_detail', args=(self.object.pk,))
 
 class PressReleaseUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_pressrelease'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -236,12 +258,14 @@ class PressReleaseUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_press_releases_detail', args=(self.object.pk,))
 
 class PressReleaseDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_pressrelease'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.PressRelease,
             pk=self.kwargs['pk'])
 
 class PressReleaseDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_pressrelease'
 
     def get_queryset(self):
         return corporate_site_models.PressRelease.permitted.all()
@@ -259,6 +283,7 @@ class PressReleaseDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_press_releases_list')
 
 class PressReleaseList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_pressrelease'
 
     def get_queryset(self):
         return corporate_site_models.PressRelease.permitted.all()
@@ -266,6 +291,7 @@ class PressReleaseList(AdminMixin, generic_views.ListView):
 # Vacancies
 
 class VacancyCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_vacancy'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -274,6 +300,7 @@ class VacancyCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_vacancies_detail', args=(self.object.pk,))
 
 class VacancyUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_vacancy'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -285,12 +312,14 @@ class VacancyUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_vacancies_detail', args=(self.object.pk,))
 
 class VacancyDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_vacancy'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.Vacancy,
             pk=self.kwargs['pk'])
 
 class VacancyDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_vacancy'
 
     def get_queryset(self):
         return corporate_site_models.Vacancy.permitted.all()
@@ -308,6 +337,7 @@ class VacancyDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_vacancies_list')
 
 class VacancyList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_vacancy'
 
     def get_queryset(self):
         return corporate_site_models.Vacancy.permitted.all()
@@ -315,6 +345,7 @@ class VacancyList(AdminMixin, generic_views.ListView):
 # Products
 
 class ProductCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_product'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -323,6 +354,7 @@ class ProductCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_products_detail', args=(self.object.pk,))
 
 class ProductUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_product'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -334,12 +366,14 @@ class ProductUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_products_detail', args=(self.object.pk,))
 
 class ProductDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_product'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.Product,
             pk=self.kwargs['pk'])
 
 class ProductDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_product'
 
     def get_queryset(self):
         return corporate_site_models.Product.permitted.all()
@@ -357,6 +391,7 @@ class ProductDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_products_list')
 
 class ProductList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_product'
 
     def get_queryset(self):
         return corporate_site_models.Product.permitted.all()
@@ -364,6 +399,7 @@ class ProductList(AdminMixin, generic_views.ListView):
 # Leader
 
 class LeaderCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -372,6 +408,7 @@ class LeaderCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_leadership_detail', args=(self.object.pk,))
 
 class LeaderUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -383,12 +420,14 @@ class LeaderUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_leadership_detail', args=(self.object.pk,))
 
 class LeaderDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.CompanyMember,
             pk=self.kwargs['pk'], is_leader=True)
 
 class LeaderDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.filter(is_leader=True)
@@ -406,6 +445,7 @@ class LeaderDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_leadership_list')
 
 class LeaderList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.filter(is_leader=True)
@@ -413,6 +453,7 @@ class LeaderList(AdminMixin, generic_views.ListView):
 # Board Member
 
 class BoardMemberCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -421,6 +462,7 @@ class BoardMemberCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_board_members_detail', args=(self.object.pk,))
 
 class BoardMemberUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -432,12 +474,14 @@ class BoardMemberUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_board_members_detail', args=(self.object.pk,))
 
 class BoardMemberDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.CompanyMember,
             pk=self.kwargs['pk'], is_board_member=True)
 
 class BoardMemberDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.filter(is_board_member=True)
@@ -455,6 +499,7 @@ class BoardMemberDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_board_members_list')
 
 class BoardMemberList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.filter(is_board_member=True)
@@ -462,6 +507,7 @@ class BoardMemberList(AdminMixin, generic_views.ListView):
 # Investors
 
 class InvestorCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -470,6 +516,7 @@ class InvestorCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_investors_detail', args=(self.object.pk,))
 
 class InvestorUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -481,12 +528,14 @@ class InvestorUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_investors_detail', args=(self.object.pk,))
 
 class InvestorDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.CompanyMember,
             pk=self.kwargs['pk'], is_investor=True)
 
 class InvestorDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.filter(is_investor=True)
@@ -504,6 +553,7 @@ class InvestorDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_investors_list')
 
 class InvestorList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.filter(is_investor=True)
@@ -511,6 +561,7 @@ class InvestorList(AdminMixin, generic_views.ListView):
 # Team
 
 class TeamCreate(AdminMixin, generic_views.CreateView):
+    permission_required = 'corporate_site.add_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -519,6 +570,7 @@ class TeamCreate(AdminMixin, generic_views.CreateView):
         return reverse('console_team_detail', args=(self.object.pk,))
 
 class TeamUpdate(AdminMixin, generic_views.UpdateView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_initial(self):
         return {'user' : self.request.user }
@@ -530,12 +582,14 @@ class TeamUpdate(AdminMixin, generic_views.UpdateView):
         return reverse('console_team_detail', args=(self.object.pk,))
 
 class TeamDetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_object(self):
         return get_object_or_404(corporate_site_models.CompanyMember,
             pk=self.kwargs['pk'])
 
 class TeamDelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.all()
@@ -553,6 +607,7 @@ class TeamDelete(AdminMixin, generic_views.DeleteView):
         return reverse('console_team_list')
 
 class TeamList(AdminMixin, generic_views.ListView):
+    permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
         return corporate_site_models.CompanyMember.permitted.all()
