@@ -16,7 +16,7 @@ from unobase import constants as unobase_constants
 from unobase.eula import models as eula_models
 from unobase.eula.console import forms
 
-class AdminMixin(unobase_mixins.ConsoleUserRequiredMixin):
+class AdminMixin(unobase_mixins.ConsoleUserRequiredMixin, unobase_mixins.PermissionRequiredMixin):
     raise_exception = False
 
 class EULAVersionFormSetMixin(object):
@@ -45,11 +45,13 @@ class EULAVersionFormSetMixin(object):
         return self.render_to_response(self.get_context_data(form=form))
 
 class EULACreate(AdminMixin, EULAVersionFormSetMixin, generic_views.CreateView):
+    permission_required = 'eula.add_eula'
     
     def get_success_url(self):
         return reverse('console_eula_detail', args=(self.object.pk,))
 
 class EULAUpdate(AdminMixin, EULAVersionFormSetMixin, generic_views.UpdateView):
+    permission_required = 'eula.change_eula'
     
     def get_success_url(self):
         return reverse('console_eula_detail', args=(self.object.pk,))
@@ -58,11 +60,13 @@ class EULAUpdate(AdminMixin, EULAVersionFormSetMixin, generic_views.UpdateView):
         return eula_models.EULA.objects.all()
 
 class EULADetail(AdminMixin, generic_views.DetailView):
+    permission_required = 'eula.change_eula'
 
     def get_object(self):
         return get_object_or_404(eula_models.EULA, pk=self.kwargs['pk'])
 
 class EULADelete(AdminMixin, generic_views.DeleteView):
+    permission_required = 'eula.delete_eula'
     
     def get_success_url(self):
         return reverse('console_eula_list')
@@ -71,6 +75,7 @@ class EULADelete(AdminMixin, generic_views.DeleteView):
         return eula_models.EULA.objects.all()
 
 class EULAList(AdminMixin, generic_views.ListView):
+    permission_required = 'eula.change_eula'
     
     def get_queryset(self):
         return eula_models.EULA.objects.all()

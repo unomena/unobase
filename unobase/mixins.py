@@ -145,6 +145,8 @@ class PermissionRequiredMixin(object):
 
         # Check to see if the request's user has the required permission.
         has_permission = request.user.has_perm(self.permission_required)
+        
+        print has_permission
 
         if not has_permission:  # If the user lacks the permission
             if self.raise_exception:  # *and* if an exception was desired
