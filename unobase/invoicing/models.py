@@ -49,7 +49,7 @@ class Invoice(ImageModel):
     
     @property
     def vat_amount(self):
-        return self.sub_total_amount * Decimal(0.14)
+        return self.sub_total_amount * Decimal(self.vat_percentage / 100.0)
     
     @property
     def sub_total_amount(self):
@@ -58,8 +58,8 @@ class Invoice(ImageModel):
         for record in self.records.all():
             total_amount += record.total_amount
             
-        return total_amount
-    
+        return (total_amount * 100) / (self.vat_percentage + 100)
+        
     @property
     def total_amount(self):
         return self.sub_total_amount + self.vat_amount
