@@ -49,7 +49,10 @@ class Invoice(ImageModel):
     
     @property
     def vat_amount(self):
-        return self.sub_total_amount * Decimal(self.vat_percentage / 100.0)
+        if self.vat_percentage > 0:
+            return self.sub_total_amount * Decimal(self.vat_percentage / 100.0)
+        
+        return 0.0
     
     @property
     def sub_total_amount(self):
