@@ -65,8 +65,7 @@ def send_mail(template_name, context, subject, text_content, from_address, to_ad
         connection = get_connection()
         connection.send_messages([msg, ])
     
-        if user is not None:
-            email_tracker_models.OutboundEmail.objects.create(user=user, subject=subject, message=html_content)
+        email_tracker_models.OutboundEmail.objects.create(user=user, subject=subject, message=html_content)
 
 def respond_with_json(response_params):
     response = http.HttpResponse(json.dumps(response_params, indent=4))
