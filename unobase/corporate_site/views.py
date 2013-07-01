@@ -5,6 +5,7 @@ Created on 15 Apr 2013
 '''
 from django.views import generic as generic_views
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from unobase.corporate_site import models
 
@@ -35,6 +36,19 @@ class AwardDetail(generic_views.DetailView):
 # Events
     
 class EventList(generic_views.ListView):
+    
+    def get_context_data(self, **kwargs):
+        context = super(EventList, self).get_context_data(**kwargs)
+        
+        context['current_events'] = self.object_list.filter(
+            end__gte=timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        )
+        
+        context['past_events'] = self.object_list.filter(
+            end__lt=timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        ).order_by('-start')
+        
+        return context
 
     def get_queryset(self):
         return models.Event.permitted.all().order_by('start')
