@@ -44,22 +44,20 @@ urlpatterns += patterns('',
     # Events
     
     url(r'^events/$',
-        views.EventList.as_view(template_name='corporate_site/events/event_list.html',
-                                paginate_by=20),
+        views.EventList.as_view(template_name='corporate_site/events/event_list.html'),
         name='corporate_site_events_list'),
                        
     # Media Coverage
     
     url(r'^media_coverage/$',
-        views.MediaCoverageList.as_view(template_name='corporate_site/media_coverage/media_coverage_list.html',
-                                        paginate_by=20),
+        views.MediaCoverageList.as_view(template_name='corporate_site/media_coverage/media_coverage_list.html'),
         name='corporate_site_media_coverage_list'),
                        
     # Press Release
     
     url(r'^press_releases/$',
         views.PressReleaseList.as_view(template_name='corporate_site/press_releases/press_release_list.html',
-                                       paginate_by=20),
+                                       paginate_by=10),
         name='corporate_site_press_release_list'),
                        
     url(r'^press_releases/detail/(?P<date>\w+)-(?P<slug>[-\w]+)/$',
