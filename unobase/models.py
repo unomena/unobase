@@ -212,7 +212,7 @@ class ContentBlock(StatefulContentModel):
 class Banner(StateModel, BaseModel):
     title = models.CharField(max_length=255)
     sites = models.ManyToManyField(Site, blank=True, null=True)
-    order = models.PostiveSmallIntegerField(default=0)
+    order = models.PositiveSmallIntegerField(default=0)
     
     class Meta:
         abstract = True
