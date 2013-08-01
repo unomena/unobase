@@ -5,12 +5,7 @@ from django.conf.urls.defaults import patterns, url
 from unobase.blog import views
 
 urlpatterns = patterns('',
-
-    # Blog
-    url(r'^(?P<slug>[\w-]+)/$',
-        views.BlogDetail.as_view(paginate_by=6, template_name='blog/blog_detail.html'),
-        name='blog_detail'),
-
+                       
     url(r'^list/$',
         views.BlogList.as_view(template_name='blog/blog_list.html'),
         name='blog_list'),
@@ -24,4 +19,9 @@ urlpatterns = patterns('',
     # Feed
     
     (r'^feed/$', views.BlogFeed()),
+
+    # Blog
+    url(r'^(?P<slug>[\w-]+)/$',
+        views.BlogDetail.as_view(paginate_by=6, template_name='blog/blog_detail.html'),
+        name='blog_detail'),
 )
