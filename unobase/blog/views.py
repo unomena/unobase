@@ -2,6 +2,8 @@ from django.views import generic as generic_views
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
+from django.contrib.syndication.views import Feed
+from django.conf import settings
 
 from unobase import constants as unobase_constants
 from unobase import views as unobase_views
@@ -44,3 +46,19 @@ class BlogEntryDetail(generic_views.DetailView):
         context = super(BlogEntryDetail, self).get_context_data(**kwargs)
         context.update({'content_type':ContentType.objects.get_for_model(self.object)})
         return context
+    
+class BlogFeed(Feed):
+    title = "%s Blog" % settings.APP_NAME
+    link = "/blog/"
+    description = "Blog entries for %s" % settings.APP_NAME
+
+    def items(self):
+        return models.BlogEntry.objects.filter(
+            state=unobase_constants.STATE_PUBLISHED
+        ).order_by('-publish_date_time')
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.content

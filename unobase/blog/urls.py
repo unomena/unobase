@@ -20,4 +20,8 @@ urlpatterns = patterns('',
     url(r'^detail/(?P<slug>[\w-]+)/$',
         views.BlogEntryDetail.as_view(template_name='blog/blog_entry_detail.html'),
         name='blog_entry_detail'),
+                       
+    # Feed
+    
+    (r'^feed/$', views.BlogFeed()),
 )

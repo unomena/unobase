@@ -1,6 +1,7 @@
 __author__ = 'michael'
 
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from unobase import models as unobase_models
 from unobase import settings as unobase_settings
@@ -15,3 +16,6 @@ class BlogEntry(unobase_models.StatefulContentModel):
     class Meta():
         ordering = ['-created']
         verbose_name_plural = 'Blog entries'
+        
+    def get_absolute_url(self):
+        return reverse('blog_entry_detail', args=(self.slug,))
