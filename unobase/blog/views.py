@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.contrib.syndication.views import Feed
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from unobase import constants as unobase_constants
 from unobase import views as unobase_views
@@ -61,4 +62,4 @@ class BlogFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.content
+        return mark_safe(item.content)
