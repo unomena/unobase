@@ -17,6 +17,8 @@ class Questionnaire(forms.Form):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.EmailField(required=False)
+    date_of_birth = forms.DateField(required=False)
+    contact_me = forms.BooleanField(required=False)
     
     def __init_rating__(self, question):
         self.base_fields.update({'question_%d' % question.id : forms.ChoiceField(label=question.question,
