@@ -11,7 +11,7 @@ class Blog(Content):
 class BlogEntry(Content):
     class Meta(Content.Meta):
         model = blog_models.BlogEntry
-        fields = Content.Meta.fields + ['posted_on_behalf_by', 'state']
+        fields = Content.Meta.fields + ['posted_on_behalf_by', 'co_authored_by', 'state']
 
     def save(self, *args, **kwargs):
         if self.initial.has_key('blog_id'):

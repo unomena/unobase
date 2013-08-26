@@ -55,6 +55,14 @@
                             <div class="editor">{{ form.posted_on_behalf_by }}{{ form.posted_on_behalf_by.errors }}</div>
                         </div>
                     </div>
+                    
+                    <div class="row">
+                        <div class="field">
+                            <label>Co-authored by</label>
+                            <div class="clear"></div>
+                            <div class="editor">{{ form.co_authored_by }}{{ form.co_authored_by.errors }}</div>
+                        </div>
+                    </div>
 
                     <div class="buttons">
                         <input type="submit" id="submit" value="{% if not form.instance.id %}Create{% else %}Update{% endif %} Blog Entry" class="btn" />
