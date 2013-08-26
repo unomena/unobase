@@ -12,6 +12,7 @@ class Blog(unobase_models.StatefulContentModel):
 class BlogEntry(unobase_models.StatefulContentModel):
     blog = models.ForeignKey(Blog)
     posted_on_behalf_by = models.ForeignKey(unobase_settings.AUTH_USER_MODEL, null=True, blank=True, related_name='blog_entries_posted_on_behalf')
+    co_authored_by = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta():
         ordering = ['-created']
