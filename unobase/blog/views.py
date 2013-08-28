@@ -18,9 +18,10 @@ class BlogDetail(unobase_views.ListWithDetailView):
 
     def get_queryset(self):
         if self.request.GET.has_key('filter_by_tag') and self.request.GET['filter_by_tag'].strip():
-            return models.BlogEntry.objects.filter(tags__title__iexact=self.request.GET['filter_by_tag'].strip())
+            return models.BlogEntry.objects.filter(tags__title__iexact=self.request.GET['filter_by_tag'].strip(), 
+                                                   state=unobase_constants.STATE_PUBLISHED)
 
-        return models.BlogEntry.objects.filter(blog=self.object)
+        return models.BlogEntry.objects.filter(blog=self.object, state=unobase_constants.STATE_PUBLISHED)
 
 class SingleBlogDetail(BlogDetail):
 

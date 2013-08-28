@@ -15,7 +15,7 @@ class BlogEntry(unobase_models.StatefulContentModel):
     co_authored_by = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta():
-        ordering = ['-created']
+        ordering = ['-publish_date_time']
         verbose_name_plural = 'Blog entries'
         
     def get_absolute_url(self):
