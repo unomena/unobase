@@ -149,7 +149,7 @@ class ContentModel(StateModel):
             
         query = ContentModel.objects.filter(
             slug__startswith=slug
-        ).exclude(id=obj.id).order_by('-id')
+        ).exclude(id=obj.id)#.order_by('-id')
     
         # No collissions
         if not query.count():
