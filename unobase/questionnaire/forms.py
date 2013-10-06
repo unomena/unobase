@@ -4,7 +4,7 @@ Created on 31 May 2013
 @author: euan
 '''
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 from unobase.questionnaire import constants, models
 
@@ -13,7 +13,7 @@ class Questionnaire(forms.Form):
     id = 'frmQuestionnaire'
     
     questionnaire = forms.ModelChoiceField(queryset=models.Questionnaire.permitted.all())
-    user = forms.ModelChoiceField(queryset=get_user_model().objects.all(), required=False)
+    user = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.EmailField(required=False)
