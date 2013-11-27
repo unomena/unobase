@@ -13,6 +13,7 @@ class AgeGateForm(forms.Form):
     birth_year = forms.ChoiceField(choices=[(i, i) for i in range((datetime.datetime.now() - datetime.timedelta(days=73*365)).year, 
                                                                   (datetime.datetime.now() - datetime.timedelta(days=17*365)).year)])
     terms_accept = forms.BooleanField(required=False)
+    next = forms.CharField(widget=forms.HiddenInput, required=False)
     
     def clean_terms_accept(self):
         if not self.cleaned_data['terms_accept']:
