@@ -13,4 +13,7 @@ class OutboundEmail(models.Model):
         ordering = ['-sent_timestamp']
         
     def __unicode__(self):
-        return u'%s - %s' % (self.sent_timestamp, self.subject)
+        if self.user:
+            return u'%s - %s - %s' % (self.sent_timestamp, self.user.email, self.subject)
+        else:
+            return u'%s - %s' % (self.sent_timestamp, self.subject)
