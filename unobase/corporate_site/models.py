@@ -33,6 +33,7 @@ class PressRelease(Article):
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_PRESS_RELEASE
     
     pdf = models.FileField(upload_to='press_releases', blank=True, null=True)
+    external_link = models.URLField(blank=True, null=True)
     
     class Meta:
         ordering = ['-publish_date_time']
