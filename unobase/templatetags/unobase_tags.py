@@ -7,6 +7,7 @@ from django.template.defaulttags import url
 from django.template import VariableDoesNotExist
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext as _
 
 from unobase import models, utils
 from unobase.commenting import models as commenting_models
@@ -81,7 +82,7 @@ class BreadcrumbNode(Node):
 
         else:
             title=title.strip("'").strip('"')
-            title=smart_unicode(title)
+            title=_(smart_unicode(title))
 
         url = None
 
