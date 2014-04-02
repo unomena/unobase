@@ -5,6 +5,7 @@ from django.http import Http404
 from django.contrib.syndication.views import Feed
 from django.conf import settings
 from django.utils.html import strip_tags
+from django.utils.text import truncate_words
 
 from unobase import constants as unobase_constants
 from unobase import views as unobase_views
@@ -63,4 +64,4 @@ class BlogFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return strip_tags(item.content)
+        return truncate_words(strip_tags(item.content), 30)
