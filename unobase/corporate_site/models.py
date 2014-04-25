@@ -80,6 +80,10 @@ class CompanyMember(unobase_models.StatefulContentModel):
     job_title = models.CharField(max_length=255, blank=True, null=True)
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
     
+    twitter_handle = models.CharField(max_length=32, blank=True, null=True)
+    linked_in_handle = models.CharField(max_length=32, blank=True, null=True)
+    facebook_handle = models.CharField(max_length=32, blank=True, null=True)
+    
     order = models.PositiveIntegerField(default=0)
     
     class Meta:
