@@ -6,6 +6,8 @@ Created on 15 Nov 2012
 from django import template
 from django.shortcuts import get_object_or_404
 
+from django.conf import settings
+
 from unobase import models
 
 register = template.Library()
@@ -17,7 +19,10 @@ register = template.Library()
 )
 def content_block(context, slug):
     try:
-        content = models.ContentBlock.permitted.get(slug=slug)
+        content = models.ContentBlock.permitted.get(
+            slug=slug,
+            sites__id=settings.SITE_ID
+        )
     except  models.ContentBlock.DoesNotExist:
         content = None
 
