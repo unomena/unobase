@@ -36,7 +36,7 @@ class AuditModelAdmin(admin.ModelAdmin):
         return super(AuditModelAdmin, self).save_model(request, obj, form, change)
     
 class ContentModelAdmin(StateModelAdmin, AuditModelAdmin):
-    list_display = ('title', 'leaf_content_type', 'admin_thumbnail',)
+    list_display = ('title', 'slug', 'leaf_content_type', 'admin_thumbnail',)
     
 
 class DefaultImageAdmin(StateModelAdmin):
@@ -48,7 +48,7 @@ class DefaultImageAdmin(StateModelAdmin):
 
 admin.site.register(models.DefaultImage, DefaultImageAdmin)
 admin.site.register(models.TagModel)
-admin.site.register(models.ContentBlock)
+admin.site.register(models.ContentBlock, ContentModelAdmin)
 
 
 class SiteListAdmin(admin.ModelAdmin):
