@@ -48,6 +48,13 @@ class DefaultImageAdmin(StateModelAdmin):
 
 admin.site.register(models.DefaultImage, DefaultImageAdmin)
 admin.site.register(models.TagModel)
+
+class ContentBlockAdmin(StateModelAdmin, AuditModelAdmin):
+    list_display = ('title', 'slug',)
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'description', 'content', 'sites',)}),
+        )
+
 admin.site.register(models.ContentBlock, ContentModelAdmin)
 
 
