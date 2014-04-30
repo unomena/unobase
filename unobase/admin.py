@@ -55,7 +55,7 @@ class ContentBlockAdmin(StateModelAdmin, AuditModelAdmin):
         (None, {'fields': ('title', 'slug', 'description', 'content', 'sites',)}),
         )
 
-admin.site.register(models.ContentBlock, ContentModelAdmin)
+admin.site.register(models.ContentBlock, ContentBlockAdmin)
 
 
 class SiteListAdmin(admin.ModelAdmin):
