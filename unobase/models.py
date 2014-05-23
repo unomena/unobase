@@ -185,6 +185,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     description = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=255)
     content = RichTextField(blank=True, null=True)
+    meta = models.TextField(blank=True, null=True)
     sites = models.ManyToManyField(Site, blank=True, null=True)
 
     objects = SiteObjectsManager()
