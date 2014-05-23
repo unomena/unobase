@@ -15,7 +15,7 @@ setup(
     tests_require=[
         'django-setuptest>=0.1.2',
         'pysqlite>=2.5',
-	'pycurl'
+        'pycurl'
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     include_package_data=True,
