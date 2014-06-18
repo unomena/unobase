@@ -23,7 +23,7 @@ def send_request_data(request_id):
     
 def complete_request(request, action):
     
-    if request.service.success_string in request.response_data:
+    if request.service.success_string in request.response_data.decode('utf8', 'ignore'):
         request.status = constants.REQUEST_STATUS_SUCCESS
         result = constants.REQUEST_ACTION_STATUS_COMPLETED
         request.completed_timestamp = timezone.now()
