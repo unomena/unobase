@@ -33,17 +33,43 @@ class ExistingImageMixin(object):
                 obj.save()
 
         return obj
-    
+
 
 class Event(Content, ExistingImageMixin):
+    dell_event = forms.BooleanField(required=False)
     image_choice = forms.ChoiceField(choices=(('new', 'new'), ('existing', 'existing')))
     existing_image = fields.ImageModelChoiceField(required=False,
         queryset=models.Event.objects.filter(~Q(image=None)).only('image', 'image_name').distinct())
-    
+
+    def __init__(self, *args, **kwargs):
+        super(Event, self).__init__(*args, **kwargs)
+
+        try:
+            if self.instance.dell_event:
+                self.fields['dell_event'].initial = True
+        except:
+            pass
+
     class Meta(Content.Meta):
         model = models.Event
         fields = Content.Meta.fields + ['venue', 'start', 'end', 'repeat', 'repeat_until', 'external_link', 'image_name', 'state']
-        
+
+    def save(self, commit=True):
+        from cumulus.models import DellEvent
+
+        obj = super(Event, self).save(commit=commit)
+        if self.cleaned_data['dell_event']:
+            try:
+                DellEvent.objects.create(event=obj)
+            except:
+                pass
+        else:
+            try:
+                obj.dell_event.delete()
+            except:
+                pass
+        return obj
+
 class MediaCoverage(Content, ExistingImageMixin):
     image_choice = forms.ChoiceField(choices=(('new', 'new'), ('existing', 'existing')))
     existing_image = fields.ImageModelChoiceField(required=False,
