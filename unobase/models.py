@@ -159,19 +159,19 @@ class AuditModel(BaseModel):
     A model to keep track of who created and modified it.
     """
     modified = models.DateTimeField(auto_now=True)
-    modified_by = models.ForeignKey(
-        unobase_settings.AUTH_USER_MODEL,
-        related_name='modified_objects',
-        blank=True,
-        null=True
-    )
+#     modified_by = models.ForeignKey(
+#         unobase_settings.AUTH_USER_MODEL,
+#         related_name='modified_objects',
+#         blank=True,
+#         null=True
+#     )
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(
-        unobase_settings.AUTH_USER_MODEL,
-        related_name='created_objects',
-        blank=True,
-        null=True
-    )
+#     created_by = models.ForeignKey(
+#         unobase_settings.AUTH_USER_MODEL,
+#         related_name='created_objects',
+#         blank=True,
+#         null=True
+#     )
 
 
 class ContentModel(ImageModel, TagModel, AuditModel):
