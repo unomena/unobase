@@ -25,11 +25,9 @@ class Content(forms.ModelForm):
     class Meta:
         model = models.ContentModel
 
-        fields = ['image', 'title', 'content', 'description', 'modified_by', 'created_by', 'tags']
+        fields = ['image', 'title', 'content', 'description', 'tags']
 
         widgets = {'image' : forms.FileInput,
-                   'modified_by' : forms.HiddenInput,
-                   'created_by' : forms.HiddenInput,
                    'content': CKEditorWidget
         }
 
@@ -42,12 +40,6 @@ class Content(forms.ModelForm):
 
         self.fields['image'].required = False
         self.fields['tags'].widget.attrs.update({'class':'chozen'})
-
-        if kwargs['initial'].has_key('user'):
-            self.fields['modified_by'].initial = kwargs['initial']['user']
-
-            if not self.object:
-                self.fields['created_by'].initial = kwargs['initial']['user']
 
         if self.object:
             tag_list = ', '.join([tag.title for tag in self.object.tags.all()])

@@ -9,7 +9,7 @@ from unobase import models as unobase_models
 from unobase.calendar import models as calendar_models
 from unobase.corporate_site import constants
 
-class Article(unobase_models.StatefulContentModel, unobase_models.RelatedModel):
+class Article(unobase_models.StatefulContentModel):
     "An article"
     image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
 
@@ -48,7 +48,7 @@ class MediaCoverage(Article):
     class Meta:
         ordering = ['-publish_date_time']
 
-class Event(calendar_models.Event, unobase_models.RelatedModel, unobase_models.StateModel):
+class Event(calendar_models.Event, unobase_models.StateModel):
     "Trade Show, Festival, Market"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_EVENT
     
@@ -61,7 +61,7 @@ class Vacancy(unobase_models.ContentModel, unobase_models.StateModel):
     "Job vacancies within the company"
     external_link = models.URLField(blank=True, null=True)
     
-class Product(unobase_models.StatefulContentModel, unobase_models.RelatedModel):
+class Product(unobase_models.StatefulContentModel):
     "Products a company is selling"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_PRODUCT
     

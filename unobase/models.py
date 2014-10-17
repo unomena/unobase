@@ -62,30 +62,6 @@ class StateModel(models.Model):
         return super(StateModel, self).save(*args, **kwargs)
 
 
-class RelatedModel(models.Model):
-    related = models.ManyToManyField('RelatedModel', blank=True, null=True)
-    related_leaf_content_type = models.ForeignKey(
-        ContentType,
-        editable=False,
-        null=True
-    )
-
-    def as_leaf_class(self):
-        return self.related_leaf_content_type.model_class().objects.get(
-            id=self.id
-        )
-
-    def save(self, *args, **kwargs):
-        self.related_leaf_content_type = ContentType.objects.get_for_model(
-            self.__class__
-        ) if not self.related_leaf_content_type else \
-            self.related_leaf_content_type
-        return super(RelatedModel, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return smart_unicode(self.as_leaf_class())
-
-
 class BaseModel(models.Model):
     """
     A model to keep track of what the leaf class looks like.
@@ -113,48 +89,15 @@ class BaseModel(models.Model):
         return super(BaseModel, self).save(*args, **kwargs)
 
 
-class TagModel(BaseModel):
+class TagModel(models.Model):
     """
     A model to keep track of tags related to it.
     """
     tags = models.ManyToManyField('tagging.Tag', related_name='tag_models',
                                   null=True, blank=True)
 
-    @staticmethod
-    def get_tags(model_type):
-        tags = []
-        for tag_model in TagModel.objects.filter(
-            leaf_content_type__model=model_type
-        ):
-            for tag in tag_model.tags.all():
-                tags.append(tag)
 
-        return tags
-
-    @staticmethod
-    def get_distinct_tags(model_type):
-        from unobase.tagging.models import Tag
-        return Tag.objects.filter(
-            tag_models__leaf_content_type__model=model_type
-        ).distinct()
-
-    @staticmethod
-    def get_tag_ratio(tag, model_type):
-        tag_list = TagModel.get_tags(model_type)
-
-        tag_set = set(tag_list)
-        tag_numbers = []
-        total_tags = float(len(tag_list))
-        ratios = []
-
-        for i, tag in enumerate(tag_set):
-            tag_numbers.append(tag_list.count(tag))
-            ratios.append(int((tag_numbers[i] / total_tags) * 10))
-
-        return ratios[list(tag_set).index(tag)]
-
-
-class AuditModel(BaseModel):
+class AuditModel(models.Model):
     """
     A model to keep track of who created and modified it.
     """
@@ -253,7 +196,7 @@ class ContentBlock(StatefulContentModel):
     pass
 
 
-class Banner(StateModel, BaseModel):
+class Banner(StateModel):
     title = models.CharField(max_length=255)
     sites = models.ManyToManyField(Site, blank=True, null=True)
     order = models.PositiveSmallIntegerField(default=0)
