@@ -11,6 +11,7 @@ from django.utils import timezone
 
 from ckeditor.fields import RichTextField
 from unobase.models import ContentModel
+from unobase.calendar import constants
 
 class Calendar(ContentModel):
 
@@ -58,6 +59,10 @@ class Event(ContentModel):
         blank=True,
         null=True,
         help_text="The url of the event's external webpage, if there is one."
+    )
+    zone_code = models.PositiveSmallIntegerField(
+        choices=constants.ZONE_CODE_CHOICES,
+        default=6
     )
     
     class Meta:

@@ -52,7 +52,9 @@ class Event(Content, ExistingImageMixin):
 
     class Meta(Content.Meta):
         model = models.Event
-        fields = Content.Meta.fields + ['venue', 'start', 'end', 'repeat', 'repeat_until', 'external_link', 'image_name', 'state']
+        fields = Content.Meta.fields + ['venue', 'start', 'end', 'repeat',
+                                        'repeat_until', 'external_link',
+                                        'image_name', 'state', 'zone_code']
 
     def save(self, commit=True):
         from cumulus.models import DellEvent

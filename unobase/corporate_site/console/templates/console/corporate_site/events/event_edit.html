@@ -102,6 +102,13 @@
                             <div>{{ form.dell_event }}{{ form.dell_event.errors }}</div>
                         </div>
                     </div>
+                    
+                    <div class="row">
+                        <div class="field field-half">
+                            <label>Zone Code (for AddThisEvent)</label>
+                            <div>{{ form.zone_code }}{{ form.zone_code.errors }}</div>
+                        </div>
+                    </div>
 
                     <div class="buttons">
                         <input type="submit" id="submit" value="{% if not form.instance.id %}Create{% else %}Update{% endif %} Event" class="btn" />
