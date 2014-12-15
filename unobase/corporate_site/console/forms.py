@@ -104,7 +104,7 @@ class PressRelease(Content):
     
     class Meta(Content.Meta):
         model = models.PressRelease
-        fields = Content.Meta.fields + ['state', 'publish_date_time']
+        fields = Content.Meta.fields + ['state', 'publish_date_time', 'external_link']
         
 class Vacancy(Content):
     
