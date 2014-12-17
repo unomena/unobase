@@ -3,11 +3,15 @@ Created on 27 Mar 2013
 
 @author: michael
 '''
-from django import forms
 import datetime
 
+from django import forms
+
+from unobase.age_gate import settings
+
+
 class AgeGateForm(forms.Form):
-    location = forms.ChoiceField(choices=(('Nigeria', 'Nigeria'),), required=False)
+    location = forms.ChoiceField(choices=settings.AGE_GATE_LOCATION_CHOICES, required=False)
     birth_day = forms.ChoiceField(choices=[(i, i) for i in range(1, 32)])
     birth_month = forms.ChoiceField(choices=[(i, i) for i in range(1, 13)])
     birth_year = forms.ChoiceField(choices=[(i, i) for i in reversed(range((datetime.datetime.now() - datetime.timedelta(days=80*365)).year, 
