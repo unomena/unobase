@@ -36,7 +36,7 @@ class EventUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.Event.permitted.all()
+        return corporate_site_models.Event.objects.all()
     
     def get_success_url(self):
         return reverse('console_event_detail', args=(self.object.pk,))
@@ -52,7 +52,7 @@ class EventDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_event'
 
     def get_queryset(self):
-        return corporate_site_models.Event.permitted.all()
+        return corporate_site_models.Event.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -90,7 +90,7 @@ class MediaCoverageUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.MediaCoverage.permitted.all()
+        return corporate_site_models.MediaCoverage.objects.all()
     
     def get_success_url(self):
         return reverse('console_media_coverage_detail', args=(self.object.pk,))
@@ -106,7 +106,7 @@ class MediaCoverageDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_mediacoverage'
 
     def get_queryset(self):
-        return corporate_site_models.MediaCoverage.permitted.all()
+        return corporate_site_models.MediaCoverage.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -144,7 +144,7 @@ class NewsUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.News.permitted.all()
+        return corporate_site_models.News.objects.all()
     
     def get_success_url(self):
         return reverse('console_news_detail', args=(self.object.pk,))
@@ -160,7 +160,7 @@ class NewsDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_news'
 
     def get_queryset(self):
-        return corporate_site_models.News.permitted.all()
+        return corporate_site_models.News.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -198,7 +198,7 @@ class AwardUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.Award.permitted.all()
+        return corporate_site_models.Award.objects.all()
     
     def get_success_url(self):
         return reverse('console_awards_detail', args=(self.object.pk,))
@@ -214,7 +214,7 @@ class AwardDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_award'
 
     def get_queryset(self):
-        return corporate_site_models.Award.permitted.all()
+        return corporate_site_models.Award.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -252,7 +252,7 @@ class PressReleaseUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.PressRelease.permitted.all()
+        return corporate_site_models.PressRelease.objects.all()
     
     def get_success_url(self):
         return reverse('console_press_releases_detail', args=(self.object.pk,))
@@ -268,7 +268,7 @@ class PressReleaseDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_pressrelease'
 
     def get_queryset(self):
-        return corporate_site_models.PressRelease.permitted.all()
+        return corporate_site_models.PressRelease.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -306,7 +306,7 @@ class VacancyUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.Vacancy.permitted.all()
+        return corporate_site_models.Vacancy.objects.all()
     
     def get_success_url(self):
         return reverse('console_vacancies_detail', args=(self.object.pk,))
@@ -322,7 +322,7 @@ class VacancyDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_vacancy'
 
     def get_queryset(self):
-        return corporate_site_models.Vacancy.permitted.all()
+        return corporate_site_models.Vacancy.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -360,7 +360,7 @@ class ProductUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.Product.permitted.all()
+        return corporate_site_models.Product.objects.all()
     
     def get_success_url(self):
         return reverse('console_products_detail', args=(self.object.pk,))
@@ -376,7 +376,7 @@ class ProductDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_product'
 
     def get_queryset(self):
-        return corporate_site_models.Product.permitted.all()
+        return corporate_site_models.Product.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -414,7 +414,7 @@ class LeaderUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_leader=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_leader=True)
     
     def get_success_url(self):
         return reverse('console_leadership_detail', args=(self.object.pk,))
@@ -430,7 +430,7 @@ class LeaderDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_leader=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_leader=True)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -468,7 +468,7 @@ class BoardMemberUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_board_member=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_board_member=True)
     
     def get_success_url(self):
         return reverse('console_board_members_detail', args=(self.object.pk,))
@@ -484,7 +484,7 @@ class BoardMemberDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_board_member=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_board_member=True)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -522,7 +522,7 @@ class InvestorUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_investor=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_investor=True)
     
     def get_success_url(self):
         return reverse('console_investors_detail', args=(self.object.pk,))
@@ -538,7 +538,7 @@ class InvestorDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_investor=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_investor=True)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -576,7 +576,7 @@ class TeamUpdate(AdminMixin, generic_views.UpdateView):
         return {'user' : self.request.user }
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.all()
+        return corporate_site_models.CompanyMember.objects.all()
     
     def get_success_url(self):
         return reverse('console_team_detail', args=(self.object.pk,))
@@ -592,7 +592,7 @@ class TeamDelete(AdminMixin, generic_views.DeleteView):
     permission_required = 'corporate_site.delete_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.all()
+        return corporate_site_models.CompanyMember.objects.all()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
