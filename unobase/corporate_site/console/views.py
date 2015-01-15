@@ -70,7 +70,7 @@ class EventList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_event'
 
     def get_queryset(self):
-        return corporate_site_models.Event.permitted.all()
+        return corporate_site_models.Event.objects.all()
     
 # Media Coverage
 
@@ -124,7 +124,7 @@ class MediaCoverageList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_mediacoverage'
 
     def get_queryset(self):
-        return corporate_site_models.MediaCoverage.permitted.all()
+        return corporate_site_models.MediaCoverage.objects.all()
     
 # News
 
@@ -178,7 +178,7 @@ class NewsList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_news'
 
     def get_queryset(self):
-        return corporate_site_models.News.permitted.all()
+        return corporate_site_models.News.objects.all()
     
 # Awards
 
@@ -232,7 +232,7 @@ class AwardList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_award'
 
     def get_queryset(self):
-        return corporate_site_models.Award.permitted.all()
+        return corporate_site_models.Award.objects.all()
     
 # Press Releases
 
@@ -286,7 +286,7 @@ class PressReleaseList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_pressrelease'
 
     def get_queryset(self):
-        return corporate_site_models.PressRelease.permitted.all()
+        return corporate_site_models.PressRelease.objects.all()
     
 # Vacancies
 
@@ -340,7 +340,7 @@ class VacancyList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_vacancy'
 
     def get_queryset(self):
-        return corporate_site_models.Vacancy.permitted.all()
+        return corporate_site_models.Vacancy.objects.all()
     
 # Products
 
@@ -394,7 +394,7 @@ class ProductList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_product'
 
     def get_queryset(self):
-        return corporate_site_models.Product.permitted.all()
+        return corporate_site_models.Product.objects.all()
     
 # Leader
 
@@ -448,7 +448,7 @@ class LeaderList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_leader=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_leader=True)
     
 # Board Member
 
@@ -502,7 +502,7 @@ class BoardMemberList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_board_member=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_board_member=True)
     
 # Investors
 
@@ -556,7 +556,7 @@ class InvestorList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.filter(is_investor=True)
+        return corporate_site_models.CompanyMember.objects.filter(is_investor=True)
     
 # Team
 
@@ -610,7 +610,7 @@ class TeamList(AdminMixin, generic_views.ListView):
     permission_required = 'corporate_site.change_companymember'
 
     def get_queryset(self):
-        return corporate_site_models.CompanyMember.permitted.all()
+        return corporate_site_models.CompanyMember.objects.all()
     
 # Content Images
 
