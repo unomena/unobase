@@ -4,7 +4,7 @@ from django.conf.urls.defaults import patterns, url
 
 from unobase.corporate_site import views
 
-urlpatterns = patterns('django.contrib.flatpages.views',
+urlpatterns = patterns('cumulus.views',
     url(r'^about/$', 'flatpage', {'url': '/about/'}, 
         name='corporate_site_about'),
                         
