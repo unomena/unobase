@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unobase',
-    version='1.3.12h',
+    version='1.3.12i',
     description='Unomena Base Django Application',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read(),
     author='Unomena',
