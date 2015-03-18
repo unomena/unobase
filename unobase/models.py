@@ -10,6 +10,8 @@ from django.utils import timezone
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 
 from photologue.models import ImageModel
 from ckeditor.fields import RichTextField
@@ -38,6 +40,153 @@ class StateManager(SiteObjectsManager):
         return queryset
 
 
+class PublishedVersionsManager(SiteObjectsManager):
+
+    def get_query_set(self):
+        model_type = ContentType.objects.get_for_model(self.model)
+        model_pks = Version.objects.filter(
+            content_type__pk=model_type.id,
+            state=constants.STATE_PUBLISHED
+        ).values_list('object_id', flat=True)
+        return self.model.objects.filter(pk__in=model_pks)
+
+    def version_list(self, object_id):
+        series = self.get_series(object_id)
+        if series is not None:
+            model_pks = series.versions.exclude(object_id=object_id)\
+                .values_list('object_id', flat=True)
+            qs = self.model.objects.filter(pk__in=model_pks).order_by('state')
+            for model in qs:
+                model.change_url = reverse('%s_%s_change' % (
+                    model._meta.app_label,
+                    model._meta.module_name),
+                    args=(model.pk,)
+                )
+            return qs
+        return []
+
+    def get_series(self, object_id):
+        model_type = ContentType.objects.get_for_model(self.model)
+        try:
+            return Version.objects.get(
+                content_type__pk=model_type.id,
+                object_id=object_id
+            ).series
+        except:
+            return None
+
+    def add_series(self, slug):
+        return VersionSeries.objects.create(
+            slug=slug
+        )
+
+    def add_version(self, obj):
+        model_type = ContentType.objects.get_for_model(self.model)
+        series = self.add_series(slugify(str(obj)))
+        Version.objects.create(
+            content_type=model_type,
+            object_id=obj.pk,
+            series=series,
+            number=1,
+            state=obj.state
+        )
+
+    def add_to_series(self, series, obj):
+        model_type = ContentType.objects.get_for_model(self.model)
+        try:
+            latest_version_number = Version.objects.filter(
+                series=series
+            ).order_by('-number')[0].number + 1
+        except:
+            latest_version_number = 1
+
+        if Version.objects.filter(
+                series=series, state=constants.STATE_PUBLISHED).exists():
+            published_version = Version.objects.get(
+                series=series,
+                state=constants.STATE_PUBLISHED
+            )
+            published_version.state = constants.STATE_UNPUBLISHED
+            published_version.save()
+            published_version.content_object.state = constants.STATE_UNPUBLISHED
+            published_version.content_object.save()
+        Version.objects.create(
+            content_type=model_type,
+            object_id=obj.pk,
+            series=series,
+            number=latest_version_number,
+            state=obj.state
+        )
+
+    def stage_version(self, object_id):
+        series = self.get_series(object_id)
+        model_type = ContentType.objects.get_for_model(self.model)
+        if series is not None and Version.objects.filter(
+                series=series, state=constants.STATE_STAGED).exists():
+            staged_version = Version.objects.get(
+                series=series,
+                state=constants.STATE_STAGED
+            )
+            staged_version.state = constants.STATE_UNPUBLISHED
+            staged_version.save()
+            staged_version.content_object.state = constants.STATE_UNPUBLISHED
+            staged_version.content_object.save()
+
+        version = Version.objects.get(
+            content_type__pk=model_type.id,
+            object_id=object_id
+        )
+        version.state = constants.STATE_STAGED
+        version.save()
+        version.content_object.state = constants.STATE_STAGED
+        version.content_object.save()
+
+    def publish_version(self, object_id):
+        series = self.get_series(object_id)
+        model_type = ContentType.objects.get_for_model(self.model)
+
+        if series is not None and Version.objects.filter(
+                series=series, state=constants.STATE_PUBLISHED).exists():
+            published_version = Version.objects.get(
+                series=series,
+                state=constants.STATE_PUBLISHED
+            )
+            published_version.state = constants.STATE_UNPUBLISHED
+            published_version.save()
+            published_version.content_object.state = constants.STATE_UNPUBLISHED
+            published_version.content_object.save()
+        version = Version.objects.get(
+            content_type__pk=model_type.id,
+            object_id=object_id
+        )
+        version.state = constants.STATE_PUBLISHED
+        version.save()
+        version.content_object.state = constants.STATE_PUBLISHED
+        version.content_object.save()
+
+
+class StagedVersionsManager(SiteObjectsManager):
+
+    def get_query_set(self):
+        model_type = ContentType.objects.get_for_model(self.model)
+        model_pks = Version.objects.filter(
+            content_type__pk=model_type.id,
+            state=constants.STATE_STAGED
+        ).values_list('object_id', flat=True)
+        return self.model.objects.filter(pk__in=model_pks)
+
+
+class UnpublishedVersionsManager(SiteObjectsManager):
+
+    def get_query_set(self):
+        model_type = ContentType.objects.get_for_model(self.model)
+        model_pks = Version.objects.filter(
+            content_type__pk=model_type.id,
+            state=constants.STATE_UNPUBLISHED
+        ).values_list('object_id', flat=True)
+        return self.model.objects.filter(pk__in=model_pks)
+
+
 class StateModel(models.Model):
     """
     A model to keep track of state.
@@ -49,6 +198,9 @@ class StateModel(models.Model):
 
     objects = models.Manager()
     permitted = StateManager()
+    published_versions = PublishedVersionsManager()
+    staged_versions = StagedVersionsManager()
+    unpublished_versions = UnpublishedVersionsManager()
 
     class Meta():
         ordering = ['-publish_date_time']
@@ -126,7 +278,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
 
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=False)
     content = RichTextField(blank=True, null=True)
     meta = models.TextField(blank=True, null=True)
     sites = models.ManyToManyField(Site, blank=True, null=True)
@@ -157,20 +309,22 @@ class ContentModel(ImageModel, TagModel, AuditModel):
         if not slug:
             slug = 'no-title'
 
-        query = self.__class__.objects.filter(
-            slug__startswith=slug
-        ).exclude(id=obj.id).order_by('-id')
+        return slug
 
-        # No collissions
-        if not query.count():
-            return slug
-
-        # Match numerical suffix if it exists
-        match = RE_NUMERICAL_SUFFIX.match(query[0].slug)
-        if match is not None:
-            return "%s-%s" % (slug, int(match.group(1)) + 1)
-        else:
-            return "%s-1" % slug
+#         query = self.__class__.objects.filter(
+#             slug__startswith=slug
+#         ).exclude(id=obj.id).order_by('-id')
+# 
+#         # No collissions
+#         if not query.count():
+#             return slug
+# 
+#         # Match numerical suffix if it exists
+#         match = RE_NUMERICAL_SUFFIX.match(query[0].slug)
+#         if match is not None:
+#             return "%s-%s" % (slug, int(match.group(1)) + 1)
+#         else:
+#             return "%s-1" % slug
 
     def save(self, *args, **kwargs):
         if not self.created:
@@ -194,6 +348,28 @@ class StatefulContentModel(StateModel, ContentModel):
 
 class ContentBlock(StatefulContentModel):
     pass
+
+
+class VersionSeries(models.Model):
+    slug = models.SlugField(max_length=255)
+    staged_slug = models.SlugField(max_length=255, blank=True, null=True)
+
+    def __unicode__(self):
+        return u'%s' % self.slug
+
+
+class Version(models.Model):
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    series = models.ForeignKey(VersionSeries, related_name='versions')
+    number = models.PositiveIntegerField()
+    state = models.PositiveSmallIntegerField(
+        choices=constants.STATE_CHOICES
+    )
+
+    def __unicode__(self):
+        return u'%s' % self.series
 
 
 class Banner(StateModel):

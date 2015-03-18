@@ -37,6 +37,7 @@ class DefaultImageAdmin(StateModelAdmin):
 admin.site.register(models.DefaultImage, DefaultImageAdmin)
 admin.site.register(models.TagModel)
 
+
 class ContentBlockAdmin(StateModelAdmin):
     list_display = ('title', 'slug',)
     fieldsets = (
@@ -48,7 +49,7 @@ admin.site.register(models.ContentBlock, ContentBlockAdmin)
 
 class SiteListAdmin(admin.ModelAdmin):
     list_display = ('title', 'site_list')
-    
+
     def site_list(self, model):
         return ', '.join([site.domain for site in model.sites.all()])
 
@@ -57,3 +58,10 @@ admin.site.register(models.HTMLBanner, SiteListAdmin)
 
 admin.site.register(models.ImageBannerSet)
 admin.site.register(models.HTMLBannerSet)
+
+
+class VersionAdmin(admin.ModelAdmin):
+    list_display = ('content_type', 'object_id', 'series', 'number', 'state')
+
+admin.site.register(models.Version, VersionAdmin)
+admin.site.register(models.VersionSeries)
