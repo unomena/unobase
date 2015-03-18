@@ -18,6 +18,7 @@ from ckeditor.fields import RichTextField
 
 from unobase import constants
 from unobase import settings as unobase_settings
+from constants import STATE_PUBLISHED
 
 RE_NUMERICAL_SUFFIX = re.compile(r'^[\w-]*-(\d+)+$')
 
@@ -41,26 +42,25 @@ class StateManager(SiteObjectsManager):
 
 
 class PublishedVersionsManager(SiteObjectsManager):
+    STATE = constants.STATE_PUBLISHED
 
     def get_query_set(self):
         model_type = ContentType.objects.get_for_model(self.model)
         model_pks = Version.objects.filter(
             content_type__pk=model_type.id,
-            state=constants.STATE_PUBLISHED
+            state=self.STATE
         ).values_list('object_id', flat=True)
         return self.model.objects.filter(pk__in=model_pks)
 
     def version_list(self, object_id):
         series = self.get_series(object_id)
         if series is not None:
-            model_pks = series.versions.exclude(object_id=object_id)\
-                .values_list('object_id', flat=True)
-            qs = self.model.objects.filter(pk__in=model_pks).order_by('state')
+            qs = series.versions.filter(state=self.STATE)
             for model in qs:
                 model.change_url = reverse('%s_%s_change' % (
-                    model._meta.app_label,
-                    model._meta.module_name),
-                    args=(model.pk,)
+                    model.content_object._meta.app_label,
+                    model.content_object._meta.module_name),
+                    args=(model.object_id,)
                 )
             return qs
         return []
@@ -165,26 +165,12 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.content_object.save()
 
 
-class StagedVersionsManager(SiteObjectsManager):
-
-    def get_query_set(self):
-        model_type = ContentType.objects.get_for_model(self.model)
-        model_pks = Version.objects.filter(
-            content_type__pk=model_type.id,
-            state=constants.STATE_STAGED
-        ).values_list('object_id', flat=True)
-        return self.model.objects.filter(pk__in=model_pks)
+class StagedVersionsManager(PublishedVersionsManager):
+    STATE = constants.STATE_STAGED
 
 
-class UnpublishedVersionsManager(SiteObjectsManager):
-
-    def get_query_set(self):
-        model_type = ContentType.objects.get_for_model(self.model)
-        model_pks = Version.objects.filter(
-            content_type__pk=model_type.id,
-            state=constants.STATE_UNPUBLISHED
-        ).values_list('object_id', flat=True)
-        return self.model.objects.filter(pk__in=model_pks)
+class UnpublishedVersionsManager(PublishedVersionsManager):
+    STATE = constants.STATE_UNPUBLISHED
 
 
 class StateModel(models.Model):
