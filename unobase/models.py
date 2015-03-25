@@ -100,16 +100,16 @@ class PublishedVersionsManager(SiteObjectsManager):
         except:
             latest_version_number = 1
 
-        if Version.objects.filter(
-                series=series, state=constants.STATE_PUBLISHED).exists():
-            published_version = Version.objects.get(
-                series=series,
-                state=constants.STATE_PUBLISHED
-            )
-            published_version.state = constants.STATE_UNPUBLISHED
-            published_version.save()
-            published_version.content_object.state = constants.STATE_UNPUBLISHED
-            published_version.content_object.save()
+#         if Version.objects.filter(
+#                 series=series, state=constants.STATE_PUBLISHED).exists():
+#             published_version = Version.objects.get(
+#                 series=series,
+#                 state=constants.STATE_PUBLISHED
+#             )
+#             published_version.state = constants.STATE_UNPUBLISHED
+#             published_version.save()
+#             published_version.content_object.state = constants.STATE_UNPUBLISHED
+#             published_version.content_object.save()
         Version.objects.create(
             content_type=model_type,
             object_id=obj.pk,
@@ -127,6 +127,7 @@ class PublishedVersionsManager(SiteObjectsManager):
                 series=series,
                 state=constants.STATE_STAGED
             )
+            print staged_version
             staged_version.state = constants.STATE_UNPUBLISHED
             staged_version.save()
             staged_version.content_object.state = constants.STATE_UNPUBLISHED
