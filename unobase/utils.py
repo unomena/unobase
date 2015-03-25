@@ -106,6 +106,12 @@ def get_token_for_user(user):
     return hashlib.md5(user.email + settings.SECRET_KEY).hexdigest()
 
 
+def get_version_object_or_404(klass, *args, **kwargs):
+    if settings.STAGING:
+        return get_staged_version_object_or_404(klass, *args, **kwargs)
+    return get_published_version_object_or_404(klass, *args, **kwargs)
+
+
 def get_published_version_object_or_404(klass, *args, **kwargs):
     queryset = klass.published_versions
     try:
@@ -163,3 +169,9 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+def get_manager(obj):
+    if settings.STAGING:
+        return getattr(obj, 'staged_versions')
+    return getattr(obj, 'published_versions')

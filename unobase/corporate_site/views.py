@@ -16,13 +16,13 @@ from unobase import utils as unobase_utils
 class NewsList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.News.published_versions.all()
+        return unobase_utils.get_manager(models.News).all()
 
 
 class NewsDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.News, slug=self.kwargs['slug']
         )
 
@@ -32,13 +32,13 @@ class NewsDetail(generic_views.DetailView):
 class AwardList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.Award.published_versions.all()
+        return unobase_utils.get_manager(models.Award).all()
 
 
 class AwardDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.Award,
             slug=self.kwargs['slug']
         )
@@ -66,7 +66,7 @@ class EventList(generic_views.ListView):
         return context
 
     def get_queryset(self):
-        return models.Event.published_versions.all().order_by('start')
+        return unobase_utils.get_manager(models.Event).all().order_by('start')
 
 # Media Coverage
 
@@ -74,7 +74,7 @@ class EventList(generic_views.ListView):
 class MediaCoverageList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.MediaCoverage.published_versions.all()
+        return unobase_utils.get_manager(models.MediaCoverage).all()
 
 # Press Releases
 
@@ -82,13 +82,13 @@ class MediaCoverageList(generic_views.ListView):
 class PressReleaseList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.PressRelease.published_versions.all()
+        return unobase_utils.get_manager(models.PressRelease).all()
 
 
 class PressReleaseDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.PressRelease, slug=self.kwargs['slug']
         )
 
@@ -98,7 +98,7 @@ class PressReleaseDetail(generic_views.DetailView):
 class VacancyList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.Vacancy.published_versions.all()
+        return unobase_utils.get_manager(models.Vacancy).all()
 
 # Leadership
 
@@ -106,13 +106,15 @@ class VacancyList(generic_views.ListView):
 class LeadershipList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.CompanyMember.published_versions.filter(is_leader=True)
+        return unobase_utils.get_manager(models.CompanyMember).filter(
+            is_leader=True
+        )
 
 
 class LeadershipDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.CompanyMember,
             slug=self.kwargs['slug'],
             is_leader=True
@@ -124,13 +126,13 @@ class LeadershipDetail(generic_views.DetailView):
 class TeamList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.CompanyMember.published_versions.all()
+        return unobase_utils.get_manager(models.CompanyMember).all()
 
 
 class TeamDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.CompanyMember,
             slug=self.kwargs['slug']
         )
@@ -141,7 +143,7 @@ class TeamDetail(generic_views.DetailView):
 class BoardList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.CompanyMember.published_versions.filter(
+        return unobase_utils.get_manager(models.CompanyMember).filter(
             is_board_member=True
         )
 
@@ -149,7 +151,7 @@ class BoardList(generic_views.ListView):
 class BoardDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.CompanyMember,
             slug=self.kwargs['slug'],
             is_board_member=True
@@ -161,13 +163,15 @@ class BoardDetail(generic_views.DetailView):
 class InvestorList(generic_views.ListView):
 
     def get_queryset(self):
-        return models.CompanyMember.published_versions.filter(is_investor=True)
+        return unobase_utils.get_manager(models.CompanyMember).filter(
+            is_investor=True
+        )
 
 
 class InvestorDetail(generic_views.DetailView):
 
     def get_object(self):
-        return unobase_utils.get_published_version_object_or_404(
+        return unobase_utils.get_version_object_or_404(
             models.CompanyMember,
             slug=self.kwargs['slug'],
             is_investor=True
