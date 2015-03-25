@@ -164,6 +164,18 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.content_object.state = constants.STATE_PUBLISHED
         version.content_object.save()
 
+    def unpublish_version(self, object_id):
+        model_type = ContentType.objects.get_for_model(self.model)
+
+        version = Version.objects.get(
+            content_type__pk=model_type.id,
+            object_id=object_id
+        )
+        version.state = constants.STATE_UNPUBLISHED
+        version.save()
+        version.content_object.state = constants.STATE_UNPUBLISHED
+        version.content_object.save()
+
 
 class StagedVersionsManager(PublishedVersionsManager):
     STATE = constants.STATE_STAGED
