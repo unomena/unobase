@@ -43,6 +43,34 @@ class StateManager(SiteObjectsManager):
 
 class PublishedVersionsManager(SiteObjectsManager):
     STATE = constants.STATE_PUBLISHED
+    NEXT_STATE = constants.STATE_STAGED
+    BOTTOM_STATE = constants.STATE_UNPUBLISHED
+
+    def get_list(self):
+        model_type = ContentType.objects.get_for_model(self.model)
+        model_qs = Version.objects.filter(
+            content_type__pk=model_type.id,
+            state=self.STATE
+        )
+        model_pks = model_qs.values_list('object_id', flat=True)
+        model_series = model_qs.values_list('series_id', flat=True)
+        next_model_qs = Version.objects.filter(
+            content_type__pk=model_type.id,
+            state=self.NEXT_STATE
+        ).exclude(series_id__in=model_series)
+        next_model_pks = next_model_qs.values_list('object_id', flat=True)
+        next_model_series = next_model_qs.values_list('series_id', flat=True)
+        bottom_model_qs = Version.objects.filter(
+            content_type__pk=model_type.id,
+            state=self.BOTTOM_STATE
+        ).exclude(series_id__in=list(model_series) + list(next_model_series))
+        series_ids = {}
+        bottom_model_pks = []
+        for bottom_model in bottom_model_qs:
+            if bottom_model.series_id not in series_ids:
+                series_ids[bottom_model.series_id] = None
+                bottom_model_pks.append(bottom_model.object_id)
+        return self.model.objects.filter(pk__in=list(model_pks) + list(next_model_pks) + list(bottom_model_pks))
 
     def get_query_set(self):
         model_type = ContentType.objects.get_for_model(self.model)
