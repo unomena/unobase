@@ -70,7 +70,9 @@ class PublishedVersionsManager(SiteObjectsManager):
             if bottom_model.series_id not in series_ids:
                 series_ids[bottom_model.series_id] = None
                 bottom_model_pks.append(bottom_model.object_id)
-        return self.model.objects.filter(pk__in=list(model_pks) + list(next_model_pks) + list(bottom_model_pks))
+        return self.model.objects.filter(
+            pk__in=list(model_pks) + list(next_model_pks) + list(bottom_model_pks)
+        ).exclude(state=constants.STATE_DELETED)
 
     def get_query_set(self):
         model_type = ContentType.objects.get_for_model(self.model)
@@ -78,7 +80,9 @@ class PublishedVersionsManager(SiteObjectsManager):
             content_type__pk=model_type.id,
             state=self.STATE
         ).values_list('object_id', flat=True)
-        return self.model.objects.filter(pk__in=model_pks)
+        return self.model.objects.filter(pk__in=model_pks).exclude(
+            state=constants.STATE_DELETED
+        )
 
     def version_list(self, object_id):
         series = self.get_series(object_id)
@@ -143,7 +147,7 @@ class PublishedVersionsManager(SiteObjectsManager):
             object_id=obj.pk,
             series=series,
             number=latest_version_number,
-            state=obj.state
+            state=constants.STATE_UNPUBLISHED
         )
 
     def stage_version(self, object_id):
@@ -155,7 +159,6 @@ class PublishedVersionsManager(SiteObjectsManager):
                 series=series,
                 state=constants.STATE_STAGED
             )
-            print staged_version
             staged_version.state = constants.STATE_UNPUBLISHED
             staged_version.save()
             staged_version.content_object.state = constants.STATE_UNPUBLISHED
@@ -168,6 +171,7 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.state = constants.STATE_STAGED
         version.save()
         version.content_object.state = constants.STATE_STAGED
+        version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
     def publish_version(self, object_id):
@@ -204,6 +208,20 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.state = constants.STATE_UNPUBLISHED
         version.save()
         version.content_object.state = constants.STATE_UNPUBLISHED
+        version.content_object.publish_date_time = timezone.now()
+        version.content_object.save()
+
+    def delete_version(self, object_id):
+        model_type = ContentType.objects.get_for_model(self.model)
+
+        version = Version.objects.get(
+            content_type__pk=model_type.id,
+            object_id=object_id
+        )
+        version.state = constants.STATE_DELETED
+        version.save()
+        version.content_object.state = constants.STATE_DELETED
+        version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
 
