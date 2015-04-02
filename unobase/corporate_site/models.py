@@ -52,7 +52,7 @@ class Event(calendar_models.Event, unobase_models.StateModel):
     "Trade Show, Festival, Market"
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_EVENT
     
-    image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    image_name = models.CharField(max_length=255, blank=True, null=True)
     
     class Meta:
         ordering = ['-start']
@@ -66,7 +66,7 @@ class Product(unobase_models.StatefulContentModel):
     default_image_category = constants.DEFAULT_IMAGE_CATEGORY_PRODUCT
     
     file = models.FileField(upload_to='products', blank=True, null=True)
-    image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    image_name = models.CharField(max_length=255, blank=True, null=True)
     
 class CompanyMember(unobase_models.StatefulContentModel):
     "Members of the company"
