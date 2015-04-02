@@ -84,6 +84,15 @@ class PublishedVersionsManager(SiteObjectsManager):
             state=constants.STATE_DELETED
         )
 
+    def get_console_query_set(self):
+        model_type = ContentType.objects.get_for_model(self.model)
+        model_pks = Version.objects.filter(
+            content_type__pk=model_type.id,
+        ).values_list('object_id', flat=True)
+        return self.model.objects.filter(pk__in=model_pks).exclude(
+            state=constants.STATE_DELETED
+        )
+
     def version_list(self, object_id):
         series = self.get_series(object_id)
         if series is not None:
