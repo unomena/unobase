@@ -11,7 +11,7 @@ from unobase.corporate_site import constants
 
 class Article(unobase_models.StatefulContentModel):
     "An article"
-    image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    image_name = models.CharField(max_length=255, blank=True, null=True)
 
 class News(Article):
     "News about the company"
