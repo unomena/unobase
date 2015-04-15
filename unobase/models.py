@@ -14,7 +14,6 @@ from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 
 from photologue.models import ImageModel
-from ckeditor.fields import RichTextField
 
 from unobase import constants
 from unobase import settings as unobase_settings
@@ -334,7 +333,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=False)
-    content = RichTextField(blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
     meta = models.TextField(blank=True, null=True)
     sites = models.ManyToManyField(Site, blank=True, null=True)
 
@@ -445,7 +444,7 @@ class ImageBanner(Banner, ImageModel):
 
 
 class HTMLBanner(Banner):
-    content = RichTextField(blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
 
 
 class BannerSet(models.Model):
