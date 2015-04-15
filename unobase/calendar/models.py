@@ -23,6 +23,9 @@ class Venue(models.Model):
     name = models.CharField(max_length=255, help_text='A short descriptive name.')
     address = models.CharField(max_length=512, help_text='Physical venue address.')
 
+    class Meta:
+        ordering = ['name', 'address']
+
     def __unicode__(self):
         return '%s, %s' % (self.name, self.address)
 

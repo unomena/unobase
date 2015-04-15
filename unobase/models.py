@@ -180,7 +180,7 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.state = constants.STATE_STAGED
         version.save()
         version.content_object.state = constants.STATE_STAGED
-        version.content_object.publish_date_time = timezone.now()
+        #version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
     def publish_version(self, object_id):
@@ -204,7 +204,7 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.state = constants.STATE_PUBLISHED
         version.save()
         version.content_object.state = constants.STATE_PUBLISHED
-        version.content_object.publish_date_time = timezone.now()
+        #version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
     def unpublish_version(self, object_id):
@@ -230,7 +230,7 @@ class PublishedVersionsManager(SiteObjectsManager):
         version.state = constants.STATE_DELETED
         version.save()
         version.content_object.state = constants.STATE_DELETED
-        version.content_object.publish_date_time = timezone.now()
+        #version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
 
