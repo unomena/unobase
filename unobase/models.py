@@ -404,6 +404,67 @@ class ContentBlock(StatefulContentModel):
     pass
 
 
+class Template(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='template_images_template')
+    path = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return u'%s' % self.name
+
+
+class ContentTemplate(models.Model):
+    template = models.ForeignKey(Template, related_name='content_templates')
+
+    content_1 = models.TextField(blank=True, null=True)
+    content_2 = models.TextField(blank=True, null=True)
+    content_3 = models.TextField(blank=True, null=True)
+    content_4 = models.TextField(blank=True, null=True)
+    content_5 = models.TextField(blank=True, null=True)
+    content_6 = models.TextField(blank=True, null=True)
+    content_7 = models.TextField(blank=True, null=True)
+    content_8 = models.TextField(blank=True, null=True)
+    content_9 = models.TextField(blank=True, null=True)
+    content_10 = models.TextField(blank=True, null=True)
+
+    image_1 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_2 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_3 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_4 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_5 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_6 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_7 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_8 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_9 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+    image_10 = models.ImageField(
+        upload_to='template_images', blank=True, null=True
+    )
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return u'%s' % self.name
+
+
 class VersionSeries(models.Model):
     slug = models.SlugField(max_length=255)
     staged_slug = models.SlugField(max_length=255, blank=True, null=True)
