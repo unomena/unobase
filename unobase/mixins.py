@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, QueryDict
 from django.utils.decorators import method_decorator
 from django.utils.http import urlquote
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 from django.utils.decorators import available_attrs
 from django.contrib.auth.models import Group
 
@@ -476,4 +476,9 @@ class AgeGateMixin(object):
 
         return super(AgeGateMixin, self).dispatch(request,
             *args, **kwargs)
-    
+
+
+class TemplatePageMixin(DetailView):
+
+    def get_template_names(self):
+        return [self.object.template.path]

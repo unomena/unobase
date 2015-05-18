@@ -408,12 +408,15 @@ class Template(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='template_images_template')
     path = models.CharField(max_length=255)
+    num_contents = models.PositiveSmallIntegerField(default=0)
+    num_images = models.PositiveSmallIntegerField(default=0)
 
     def __unicode__(self):
         return u'%s' % self.name
 
 
 class ContentTemplate(models.Model):
+    slug = models.SlugField()
     template = models.ForeignKey(Template, related_name='content_templates')
 
     content_1 = models.TextField(blank=True, null=True)
@@ -462,7 +465,7 @@ class ContentTemplate(models.Model):
         abstract = True
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return u'%s' % self.slug
 
 
 class VersionSeries(models.Model):

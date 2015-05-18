@@ -65,3 +65,4 @@ class VersionAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Version, VersionAdmin)
 admin.site.register(models.VersionSeries)
+admin.site.register(models.Template)
