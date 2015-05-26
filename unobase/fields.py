@@ -28,9 +28,7 @@ class RedactorTextField(models.TextField):
         super(RedactorTextField, self).__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
-        defaults = {
-            'form_class': RedactorTextFormField
-        }
+        defaults = {'form_class': RedactorTextFormField}
         defaults.update(kwargs)
         return super(RedactorTextField, self).formfield(**defaults)
 
@@ -38,10 +36,7 @@ class RedactorTextField(models.TextField):
 class RedactorTextFormField(forms.fields.CharField):
     def __init__(self, *args, **kwargs):
         kwargs.update({'widget': forms.Textarea()})
-        kwargs['widget'].attrs.update({
-                    'class': 'redactor'
-                })
-        print kwargs['widget'].attrs
+        kwargs['widget'].attrs.update({'class': 'redactor'})
         super(RedactorTextFormField, self).__init__(*args, **kwargs)
 
 try:
