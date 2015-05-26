@@ -4,18 +4,16 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 
-from ckeditor.widgets import CKEditorWidget
-
 import models
 import constants
 
 from tagging import models as tagging_models
 
 class State(forms.ModelForm):
-    
+
     class Meta:
         model = models.StateModel
-        
+
         fields = ['state', 'publish_date_time', 'retract_date_time']
 
 class Content(forms.ModelForm):
@@ -27,15 +25,13 @@ class Content(forms.ModelForm):
 
         fields = ['image', 'title', 'content', 'description', 'tags']
 
-        widgets = {'image' : forms.FileInput,
-                   'content': CKEditorWidget
-        }
+        widgets = {'image' : forms.FileInput}
 
     def __init__(self, *args, **kwargs):
         super(Content, self).__init__(*args, **kwargs)
 
         self.object = kwargs['instance']
-        
+
         self.fields['title'].widget.attrs.update({'class': 'required'})
 
         self.fields['image'].required = False

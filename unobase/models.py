@@ -15,7 +15,7 @@ from django.core.urlresolvers import reverse
 
 from photologue.models import ImageModel
 
-from unobase import constants
+from unobase import constants, fields
 from unobase import settings as unobase_settings
 from constants import STATE_PUBLISHED
 
@@ -333,7 +333,7 @@ class ContentModel(ImageModel, TagModel, AuditModel):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=False)
-    content = models.TextField(blank=True, null=True)
+    content = fields.RedactorTextField(blank=True, null=True)
     meta = models.TextField(blank=True, null=True)
     sites = models.ManyToManyField(Site, blank=True, null=True)
 
@@ -368,11 +368,11 @@ class ContentModel(ImageModel, TagModel, AuditModel):
 #         query = self.__class__.objects.filter(
 #             slug__startswith=slug
 #         ).exclude(id=obj.id).order_by('-id')
-# 
+#
 #         # No collissions
 #         if not query.count():
 #             return slug
-# 
+#
 #         # Match numerical suffix if it exists
 #         match = RE_NUMERICAL_SUFFIX.match(query[0].slug)
 #         if match is not None:
