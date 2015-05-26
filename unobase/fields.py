@@ -3,6 +3,7 @@ Created on 23 Apr 2013
 
 @author: michael
 '''
+from django import forms
 from django.db import models
 import uuid
 
