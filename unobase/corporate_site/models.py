@@ -78,7 +78,7 @@ class CompanyMember(unobase_models.StatefulContentModel):
     is_investor = models.BooleanField(default=False)
     
     job_title = models.CharField(max_length=255, blank=True, null=True)
-    image_name = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    image_name = models.CharField(max_length=255, blank=True, null=True)
     
     twitter_handle = models.CharField(max_length=32, blank=True, null=True)
     linked_in_handle = models.CharField(max_length=32, blank=True, null=True)
