@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unobase',
-    version='1.3.12.cumulus.3',
+    version='1.3.12.cumulus.4',
     description='Unomena Base Django Application',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read(),
     author='Unomena',

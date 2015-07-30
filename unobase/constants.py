@@ -43,3 +43,19 @@ ACTION_CHOICES = ((ACTIVITY_LOGIN, 'logged in'),
 MODERATION_ACTIONS = [ACTIVITY_MODERATE_APPROVE,
                       ACTIVITY_MODERATE_UNAPPROVE,
                       ACTIVITY_MODERATE_SPAM]
+
+SERVER_A = 0
+SERVER_B = 1
+SERVER_BOTH = 2
+
+SERVER_CHOICES = (
+    (SERVER_A, 'Server A'),
+    (SERVER_B, 'Server B'),
+    (SERVER_BOTH, 'Both')
+)
+
+SERVER_MAPPING = {
+    'A': SERVER_A,
+    'B': SERVER_B,
+    'BOTH': SERVER_BOTH
+}

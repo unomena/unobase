@@ -75,10 +75,16 @@ class PublishedVersionsManager(SiteObjectsManager):
 
     def get_query_set(self):
         model_type = ContentType.objects.get_for_model(self.model)
-        model_pks = Version.objects.filter(
+        version_qs = Version.objects.filter(
             content_type__pk=model_type.id,
             state=self.STATE
-        ).values_list('object_id', flat=True)
+        )
+        if settings.AB_TESTING:
+            version_qs = version_qs.filter(
+                models.Q(server=constants.SERVER_BOTH) |
+                models.Q(server=constants.SERVER_MAPPING[settings.WEB_SERVER])
+            )
+        model_pks = version_qs.values_list('object_id', flat=True)
         return self.model.objects.filter(pk__in=model_pks).exclude(
             state=constants.STATE_DELETED
         )
@@ -120,7 +126,7 @@ class PublishedVersionsManager(SiteObjectsManager):
             slug=slug
         )
 
-    def add_version(self, obj):
+    def add_version(self, obj, server):
         model_type = ContentType.objects.get_for_model(self.model)
         series = self.add_series(slugify(str(obj)))
         Version.objects.create(
@@ -128,10 +134,11 @@ class PublishedVersionsManager(SiteObjectsManager):
             object_id=obj.pk,
             series=series,
             number=1,
-            state=obj.state
+            state=obj.state,
+            server=constants.SERVER_MAPPING[server]
         )
 
-    def add_to_series(self, series, obj):
+    def add_to_series(self, series, obj, server):
         model_type = ContentType.objects.get_for_model(self.model)
         try:
             latest_version_number = Version.objects.filter(
@@ -155,10 +162,11 @@ class PublishedVersionsManager(SiteObjectsManager):
             object_id=obj.pk,
             series=series,
             number=latest_version_number,
-            state=constants.STATE_UNPUBLISHED
+            state=constants.STATE_UNPUBLISHED,
+            server=constants.SERVER_MAPPING[server]
         )
 
-    def stage_version(self, object_id):
+    def stage_version(self, object_id, server):
         series = self.get_series(object_id)
         model_type = ContentType.objects.get_for_model(self.model)
         if series is not None and Version.objects.filter(
@@ -177,12 +185,13 @@ class PublishedVersionsManager(SiteObjectsManager):
             object_id=object_id
         )
         version.state = constants.STATE_STAGED
+        version.server = constants.SERVER_MAPPING[server]
         version.save()
         version.content_object.state = constants.STATE_STAGED
         #version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
-    def publish_version(self, object_id):
+    def publish_version(self, object_id, server):
         series = self.get_series(object_id)
         model_type = ContentType.objects.get_for_model(self.model)
 
@@ -201,12 +210,13 @@ class PublishedVersionsManager(SiteObjectsManager):
             object_id=object_id
         )
         version.state = constants.STATE_PUBLISHED
+        version.server = constants.SERVER_MAPPING[server]
         version.save()
         version.content_object.state = constants.STATE_PUBLISHED
         #version.content_object.publish_date_time = timezone.now()
         version.content_object.save()
 
-    def unpublish_version(self, object_id):
+    def unpublish_version(self, object_id, server):
         model_type = ContentType.objects.get_for_model(self.model)
 
         version = Version.objects.get(
@@ -214,6 +224,7 @@ class PublishedVersionsManager(SiteObjectsManager):
             object_id=object_id
         )
         version.state = constants.STATE_UNPUBLISHED
+        version.server = constants.SERVER_MAPPING[server]
         version.save()
         version.content_object.state = constants.STATE_UNPUBLISHED
         version.content_object.publish_date_time = timezone.now()
@@ -484,6 +495,10 @@ class Version(models.Model):
     number = models.PositiveIntegerField()
     state = models.PositiveSmallIntegerField(
         choices=constants.STATE_CHOICES
+    )
+    server = models.PositiveSmallIntegerField(
+        choices=constants.SERVER_CHOICES,
+        default=constants.SERVER_BOTH
     )
 
     def __unicode__(self):
