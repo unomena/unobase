@@ -169,23 +169,44 @@ class PublishedVersionsManager(SiteObjectsManager):
     def stage_version(self, object_id, server):
         series = self.get_series(object_id)
         model_type = ContentType.objects.get_for_model(self.model)
-        if series is not None and Version.objects.filter(
-                series=series, state=constants.STATE_STAGED).exists():
-            staged_version = Version.objects.get(
-                series=series,
-                state=constants.STATE_STAGED
-            )
-            staged_version.state = constants.STATE_UNPUBLISHED
-            staged_version.save()
-            staged_version.content_object.state = constants.STATE_UNPUBLISHED
-            staged_version.content_object.save()
+        server = constants.SERVER_MAPPING[server]
+        both = False
+        if settings.AB_TESTING:
+            if series is not None and server == constants.SERVER_BOTH:
+                replace_staged = True
+                both = True
+            else:
+                replace_staged = series is not None and Version.objects.filter(
+                    series=series, state=constants.STATE_STAGED
+                ).filter(models.Q(server=constants.SERVER_BOTH) | models.Q(server=server)).exists()
+        else:
+            replace_staged = series is not None and Version.objects.filter(
+                series=series, state=constants.STATE_STAGED
+            ).exists()
+        if replace_staged:
+            if not settings.AB_TESTING or both:
+                staged_versions = Version.objects.filter(
+                    series=series,
+                    state=constants.STATE_STAGED
+                )
+            else:
+                staged_versions = Version.objects.filter(
+                    series=series,
+                    state=constants.STATE_STAGED,
+                    server__in=[constants.SERVER_BOTH, server]
+                )
+            for staged_version in staged_versions:
+                staged_version.state = constants.STATE_UNPUBLISHED
+                staged_version.save()
+                staged_version.content_object.state = constants.STATE_UNPUBLISHED
+                staged_version.content_object.save()
 
         version = Version.objects.get(
             content_type__pk=model_type.id,
             object_id=object_id
         )
         version.state = constants.STATE_STAGED
-        version.server = constants.SERVER_MAPPING[server]
+        version.server = server
         version.save()
         version.content_object.state = constants.STATE_STAGED
         #version.content_object.publish_date_time = timezone.now()
@@ -194,23 +215,44 @@ class PublishedVersionsManager(SiteObjectsManager):
     def publish_version(self, object_id, server):
         series = self.get_series(object_id)
         model_type = ContentType.objects.get_for_model(self.model)
+        server = constants.SERVER_MAPPING[server]
+        both = False
+        if settings.AB_TESTING:
+            if series is not None and server == constants.SERVER_BOTH:
+                replace_published = True
+                both = True
+            else:
+                replace_published = series is not None and Version.objects.filter(
+                    series=series, state=constants.STATE_PUBLISHED
+                ).filter(models.Q(server=constants.SERVER_BOTH) | models.Q(server=server)).exists()
+        else:
+            replace_published = series is not None and Version.objects.filter(
+                series=series, state=constants.STATE_PUBLISHED
+            ).exists()
+        if replace_published:
+            if not settings.AB_TESTING or both:
+                published_versions = Version.objects.filter(
+                    series=series,
+                    state=constants.STATE_PUBLISHED
+                )
+            else:
+                published_versions = Version.objects.filter(
+                    series=series,
+                    state=constants.STATE_PUBLISHED,
+                    server__in=[constants.SERVER_BOTH, server]
+                )
+            for published_version in published_versions:
+                published_version.state = constants.STATE_UNPUBLISHED
+                published_version.save()
+                published_version.content_object.state = constants.STATE_UNPUBLISHED
+                published_version.content_object.save()
 
-        if series is not None and Version.objects.filter(
-                series=series, state=constants.STATE_PUBLISHED).exists():
-            published_version = Version.objects.get(
-                series=series,
-                state=constants.STATE_PUBLISHED
-            )
-            published_version.state = constants.STATE_UNPUBLISHED
-            published_version.save()
-            published_version.content_object.state = constants.STATE_UNPUBLISHED
-            published_version.content_object.save()
         version = Version.objects.get(
             content_type__pk=model_type.id,
             object_id=object_id
         )
         version.state = constants.STATE_PUBLISHED
-        version.server = constants.SERVER_MAPPING[server]
+        version.server = server
         version.save()
         version.content_object.state = constants.STATE_PUBLISHED
         #version.content_object.publish_date_time = timezone.now()
