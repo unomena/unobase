@@ -9,7 +9,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 from unobase.models import ContentModel
 
 class Calendar(ContentModel):
@@ -26,20 +26,20 @@ class Venue(models.Model):
         return '%s, %s' % (self.name, self.address)
 
 class Event(ContentModel):
-    
-    parent_ptr = models.OneToOneField(
-        ContentModel,
-        primary_key=True,
-        parent_link=True,
-        related_name='+'
-    )
-    
+
+    # parent_ptr = models.OneToOneField(
+    #     ContentModel,
+    #     primary_key=True,
+    #     parent_link=True,
+    #     related_name='+'
+    # )
+
     venue = models.ForeignKey(Venue, blank=True, null=True,
                               help_text='Venue where the event will take place.',
                               )
     start = models.DateTimeField(db_index=True)
     end = models.DateTimeField(blank=True, null=True)
-    
+
     repeat = models.CharField(
         max_length=64,
         choices=(
@@ -59,20 +59,20 @@ class Event(ContentModel):
         null=True,
         help_text="The url of the event's external webpage, if there is one."
     )
-    
+
     class Meta:
         ordering = ('start', )
-        
+
     @property
     def duration(self):
         return self.end - self.start
-    
+
     @property
     def in_same_month(self):
         if self.start.year == self.end.year and self.start.month == self.end.month:
             return True
         return False
-    
+
     @property
     def same_day(self):
         if self.start == self.end:
@@ -97,16 +97,16 @@ class Event(ContentModel):
             if self.repeat_until is None or date <= self.repeat_until:
                 return datetime.combine(date, self.start.timetz())
         return None
-    
+
     @property
     def last(self):
         if self.repeat == 'does_not_repeat':
             return self.start
         else:
             return datetime.combine(self.repeat_until, self.start.timetz())
-        
+
     def save(self, *args, **kwargs):
         if not self.end:
             self.end = self.start
         return super(Event, self).save(*args, **kwargs)
-        
+
