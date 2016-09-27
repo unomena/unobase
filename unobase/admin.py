@@ -34,10 +34,10 @@ class AuditModelAdmin(admin.ModelAdmin):
             obj.created_by = request.user
 
         return super(AuditModelAdmin, self).save_model(request, obj, form, change)
-    
+
 class ContentModelAdmin(StateModelAdmin, AuditModelAdmin):
-    list_display = ('title', 'leaf_content_type', 'admin_thumbnail',)
-    
+    list_display = ('title', 'admin_thumbnail',)
+
 
 class DefaultImageAdmin(StateModelAdmin):
     list_display = ('title', 'state', 'admin_thumbnail',)

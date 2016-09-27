@@ -5,7 +5,7 @@ Created on 06 Mar 2013
 '''
 from django.db import models
 
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 
 class EULAManager(models.Manager):
     def latest_eula(self):
@@ -15,10 +15,10 @@ class EULAManager(models.Manager):
             return None
 
 class EULA(models.Model):
-    content = RichTextField()
+    content = models.TextField()
     version = models.PositiveIntegerField(default=1)
-    
+
     objects = EULAManager()
-    
+
     def __unicode__(self):
         return u'Version %i' % self.version
